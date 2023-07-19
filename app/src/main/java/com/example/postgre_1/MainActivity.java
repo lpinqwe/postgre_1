@@ -20,12 +20,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     StringBuilder mInfo = new StringBuilder();
     StringBuilder mAcc = new StringBuilder("Акселерометр:");
+    StringBuilder mLAcc = new StringBuilder("Линейный акселерометр:");
     Set<String> s = new HashSet<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
     }
 
@@ -46,10 +48,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             s.add(Build.FINGERPRINT);
             //s.add(Build.SOC_MODEL);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
+
     @Override
     protected void onResume() {
        /* mSensorManager = (SensorManager) this
@@ -66,9 +69,38 @@ public class MainActivity extends Activity implements SensorEventListener {
                 mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE),
                 SensorManager.SENSOR_DELAY_UI);
 */
+        Object[] sensors = new Object()[30];
         mSensorManager.registerListener(this,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),//3
                 SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED),//6
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY),//3
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),//3
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED),//6
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),//3
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),//4
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION),//1
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),//1
+                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),//1
+                SensorManager.SENSOR_DELAY_GAME);
+
         super.onResume();
     }
 
@@ -84,7 +116,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             mAcc = new StringBuilder("акселерометр:");
-            mAcc.append(event.values[0]);
+            mAcc.append("\n"+event.values[0]+"\n");
+            mAcc.append(     event.values[1]+"\n");
+            mAcc.append(     event.values[2]+"\n");
         }
 
         mInfo.append(String.format("%1$s\n", mAcc));
@@ -96,7 +130,5 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-
     }
 }

@@ -7,12 +7,16 @@ public class PostgreSend {
     private final String url = "jdbc:postgresql://192.168.99.106:5432/postgres";
     private final String user = "postgres";
     private final String password = "password";
-    private String SQLstring = "insert into newdata\n" +
-            "(mac, data1, data2, data3,\"date\")\n" +
-            "values\n" +
-            "('phone','data1','data2','data3',now())\n" +
-            ";";
+    private String SQLstring ;
 
+    public String getSQLstring() {
+        return SQLstring;
+    }
+
+    public PostgreSend setSQLstring(String SQLstring) {
+        this.SQLstring = SQLstring;
+        return this;
+    }
 
     public Connection connect() {
 
