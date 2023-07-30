@@ -1,7 +1,9 @@
 package com.example.postgre_1;
 
 import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 public class PostgreSend {
 
     private final String url = "jdbc:postgresql://192.168.99.106:5432/postgres";
@@ -29,6 +31,7 @@ public class PostgreSend {
             conn = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to the PostgreSQL server successfully.");
         } catch (Exception e) {
+            System.out.println("Connect Error");
             System.out.println(e.getMessage());
             e.printStackTrace();
         }

@@ -84,7 +84,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             }
             String loacalStrToSend=strBuilder.AddData("mac",event.values);
             //System.out.println(loacalStrToSend);
-
+            postgreSend1.sendData(loacalStrToSend);
             /*
             mAcc.append("\n" + event.values[0] + "\n");
             mAcc.append(event.values[1] + "\n");
