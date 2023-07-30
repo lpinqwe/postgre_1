@@ -7,7 +7,11 @@ public class PostgreSend {
     private final String url = "jdbc:postgresql://192.168.99.106:5432/postgres";
     private final String user = "postgres";
     private final String password = "password";
-    private String SQLstring ;
+    private String SQLstring ="insert into newdata\n" +
+            "(mac, data1, data2, data3,\"date\")\n" +
+            "values\n" +
+            "('ac:ac:ac',0.11,'data2','data3',now())\n" +
+            ";";
 
     public String getSQLstring() {
         return SQLstring;
@@ -32,21 +36,28 @@ public class PostgreSend {
         return conn;
     }
 
-    public String send(String[] data) {
+    public String CreateString(String[] data) {
         String newString = "";
         for (int i = 0; i < data.length; i++) {
             newString += data[i];
         }
+        return  newString;
+    }
+    public String send(String strToSend){
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(SQLstring)) {
             ResultSet rs = pstmt.executeQuery();
-            System.out.println("sended: " + newString);
+            System.out.println("sended: " + strToSend);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
-        return newString;
+        return strToSend;
+    }
+    public void sendData(String dataToSend){
+        this.send(dataToSend);
+
     }
 }
