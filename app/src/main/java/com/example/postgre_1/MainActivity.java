@@ -1,6 +1,5 @@
 package com.example.postgre_1;
 
-
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -24,7 +23,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     StringBuilder mLAcc = new StringBuilder("Линейный акселерометр:");
     Set<String> s = new HashSet<String>();
     StringDataBuilder strBuilder = new StringDataBuilder();
-    PostgreSend postgreSend1=new PostgreSend();
+    //PostgreSend postgreSend1=new PostgreSend();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +83,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             }
             String loacalStrToSend=strBuilder.AddData("mac",event.values);
             //System.out.println(loacalStrToSend);
-            postgreSend1.sendData(loacalStrToSend);
+            //postgreSend1.sendData(loacalStrToSend);
             /*
             mAcc.append("\n" + event.values[0] + "\n");
             mAcc.append(event.values[1] + "\n");

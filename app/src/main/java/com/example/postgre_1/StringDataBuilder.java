@@ -18,7 +18,8 @@ public class StringDataBuilder {
     }
 
     public String AddData(String nameColumn, float[] arr) {
-        defString = String.format(defString, nameColumn,
+        defString = String.format(defString,
+                "mac",
                 floatToString.toStringFloat(arr[0]),
                 floatToString.toStringFloat(arr[1]),
                 floatToString.toStringFloat(arr[2]),
