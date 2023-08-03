@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorArrayList.add(Sensor.TYPE_SIGNIFICANT_MOTION);
         sensorArrayList.add(Sensor.TYPE_STEP_COUNTER);
         sensorArrayList.add(Sensor.TYPE_STEP_DETECTOR);
+        FileManager1 fileManager=new FileManager1();
 
     }
 
