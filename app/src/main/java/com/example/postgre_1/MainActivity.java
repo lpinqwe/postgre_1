@@ -165,7 +165,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
     public void sndFunc() throws IOException {
-        String postUrl = "https://192.168.1.197:80";
+        String postUrl = "http://192.168.1.197:80";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JSONObject postData = new JSONObject();
