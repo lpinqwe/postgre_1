@@ -46,6 +46,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     StringBuilder mLAcc = new StringBuilder("Линейный акселерометр:");
     StringDataBuilder strBuilder = new StringDataBuilder();
     JSONObject postData = new JSONObject();
+    SensorActivity sensors = new SensorActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,19 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
         sensorArrayList.add(Sensor.TYPE_ORIENTATION);
+        mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+//ToDo: lambda expression for this shit
+//ToDo: dont forger to register sensors
+        /*
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+          magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+           sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+         sensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        * */
+
 
         //FileManager1 fileManager=new FileManager1();
 
@@ -98,6 +112,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        Log.i("SENSOR", "ZERO POINT_+_+_+_+_++__+_+_++_+__+_+_+_+_+_+_+");
+        sensors.onSensorChanged(event);
+
+    }
+
+    /*
+    public void onSensorChanged(SensorEvent event) {
         mInfo = new StringBuilder();
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -115,7 +136,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         tv_sensors.setText(mInfo.toString());
 
     }
-
+*/
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
