@@ -8,20 +8,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileManager1 extends AppCompatActivity {
-    private final static String FILE_NAME = "content.txt";
-
-    public FileManager1() {
-
-
+    String saveData = "";
+    public void addData(String dataToSaveAndSend){
+        saveData = saveData+dataToSaveAndSend;
+    }
+    public String msgCurrentTime(){
+        return String.valueOf((System.currentTimeMillis()));
+    }
+    public void cleanData(){
+        saveData = "";
     }
 
-    public void writeText(String textToWrite) throws IOException {
-        try {
-            FileOutputStream myFile = openFileOutput("logText.txt", MODE_PRIVATE);
-            myFile.write(textToWrite.getBytes());
-            myFile.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public String getData(){
+        return this.saveData;
     }
+
+
 }

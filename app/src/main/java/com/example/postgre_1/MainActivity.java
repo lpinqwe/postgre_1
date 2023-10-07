@@ -26,14 +26,16 @@ import java.util.Set;
 
 /*
  * sensors to read:
- * TYPE_GAME_ROTATION_VECTOR
- * TYPE_GYROSCOPE
- * TYPE_GRAVITY
- *TYPE_ACCELEROMETER
- * TYPE_ROTATION_VECTOR
- * TYPE_LINEAR_ACCELERATION
- * TYPE_AMBIENT_TEMPERATURE
- * TYPE_LIGHT
+ * 1  TYPE_GAME_ROTATION_VECTOR
+ * 2  TYPE_GYROSCOPE
+ * 3  TYPE_GRAVITY
+ * 4  TYPE_ORIENTATION
+ * 5  TYPE_PROXIMITY
+ * 6  TYPE_ACCELEROMETER
+ * 7  TYPE_ROTATION_VECTOR
+ * 8  TYPE_LINEAR_ACCELERATION
+ * 9  TYPE_AMBIENT_TEMPERATURE
+ * 10 TYPE_LIGHT
  *
  * */
 public class MainActivity extends Activity implements SensorEventListener {
@@ -42,24 +44,25 @@ public class MainActivity extends Activity implements SensorEventListener {
     StringBuilder mInfo = new StringBuilder();
     StringBuilder mAcc = new StringBuilder("Акселерометр:");
     StringBuilder mLAcc = new StringBuilder("Линейный акселерометр:");
-    Set<String> s = new HashSet<String>();
     StringDataBuilder strBuilder = new StringDataBuilder();
+    JSONObject postData = new JSONObject();
 
-    //PostgreSend postgreSend1=new PostgreSend();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sensorArrayList.add(Sensor.TYPE_ACCELEROMETER);
-        sensorArrayList.add(Sensor.TYPE_GRAVITY);
+
+        sensorArrayList.add(Sensor.TYPE_GAME_ROTATION_VECTOR);
         sensorArrayList.add(Sensor.TYPE_GYROSCOPE);
-        sensorArrayList.add(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
-        sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
+        sensorArrayList.add(Sensor.TYPE_GRAVITY);
+        sensorArrayList.add(Sensor.TYPE_PROXIMITY);
+        sensorArrayList.add(Sensor.TYPE_ACCELEROMETER);
         sensorArrayList.add(Sensor.TYPE_ROTATION_VECTOR);
-        sensorArrayList.add(Sensor.TYPE_SIGNIFICANT_MOTION);
-        sensorArrayList.add(Sensor.TYPE_STEP_COUNTER);
-        sensorArrayList.add(Sensor.TYPE_STEP_DETECTOR);
+        sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
+        sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        sensorArrayList.add(Sensor.TYPE_ORIENTATION);
+
         //FileManager1 fileManager=new FileManager1();
 
     }
@@ -67,47 +70,16 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onStart() {
         super.onStart();
-
-        try {
-            s.add(Build.BRAND);
-            s.add(Build.DEVICE);
-            s.add(Build.ID);
-            s.add(Build.FINGERPRINT);
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
     protected void onResume() {
-        sensorArrayList.parallelStream().forEach(
-                sensor -> {
-                    mSensorManager.registerListener(this,
-                            mSensorManager.getDefaultSensor(sensor),
-                            SensorManager.SENSOR_DELAY_UI);
-                });
+
         super.onResume();
     }
 
-    public void msgFunc2() {
-        ClientPart2 client = new ClientPart2();
-        Log.i("WIFI", "BEGINING");
-        try {
-            Log.i("WIFI", "tryToSend");
-            client.httpPostCommand1("hello".getBytes(), "192.168.1.197", 10);
-            Log.i("WIFI", "Sended");
-        } catch (IOException e) {
-            Log.i("WIFI", "ErrorSend");
-            throw new RuntimeException(e);
-        }
-        Log.i("WIFI", "END?????????????????????");
-    }
-
     public void msgFunc() throws IOException {
-        ClientPart client = new ClientPart();
-        Log.i("WIFI", "tryToSend");
         sndFunc();
-        Log.i("WIFI", "Sended");
     }
 
     @Override
@@ -134,25 +106,8 @@ public class MainActivity extends Activity implements SensorEventListener {
                 mAcc.append("\n" + event.values[valuesD]);
             }
             String loacalStrToSend = strBuilder.AddData("mac", event.values);
-            //System.out.println(loacalStrToSend);
-            //postgreSend1.sendData(loacalStrToSend);
-            /*
-            mAcc.append("\n" + event.values[0] + "\n");
-            mAcc.append(event.values[1] + "\n");
-            mAcc.append(event.values[2] + "\n");
-            */
-        }
-/*
-        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            mAcc = new StringBuilder("Linear:");
-            mAcc.append("\n" + event.values[0] + "\n");
-            mAcc.append(event.values[1] + "\n");
-            mAcc.append(event.values[2] + "\n");
 
         }
-        */
-
-
         mInfo.append(String.format("%1$s\n", mAcc));
 
         TextView tv_sensors = (TextView) findViewById(R.id.textView2);
@@ -164,17 +119,18 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
+
     public void sndFunc() throws IOException {
         String postUrl = "http://192.168.1.197:80";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        JSONObject postData = new JSONObject();
+
         try {
-            postData.put("email", "editTextEmail.getText().toString()");
-            postData.put("password", "editTextPassword.getText().toString()");
-            postData.put("rememberPassword", false);
-            postData.put("ip_address", "1.41");
-            postData.put("isCaptchaEnabled", false);
+            postData.put("emailVolodar", "editTextEmail.getText().toString()");
+            // postData.put("password", "editTextPassword.getText().toString()");
+            // postData.put("rememberPassword", false);
+            // postData.put("ip_address", "1.41");
+            // postData.put("isCaptchaEnabled", false);
 
         } catch (JSONException e) {
             e.printStackTrace();
