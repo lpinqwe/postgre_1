@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.VolumeShaper;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +49,14 @@ public class MainActivity extends Activity implements SensorEventListener {
     JSONObject postData = new JSONObject();
     SensorActivity sensors = new SensorActivity();
 
+    public void activateSensors(List<Integer> sensorList) {
+        for (int i = 0; i < sensorList.size(); i++) {
+            mSensorManager.registerListener(this,
+                    mSensorManager.getDefaultSensor(sensorList.get(i)),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +72,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
         sensorArrayList.add(Sensor.TYPE_ORIENTATION);
+        /*
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
-//ToDo: lambda expression for this shit
-//ToDo: dont forger to register sensors
+
+         */
+
         /*
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
          accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -83,6 +94,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onStart() {
+        activateSensors(sensorArrayList);
         super.onStart();
     }
 
