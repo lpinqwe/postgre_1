@@ -5,11 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.VolumeShaper;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,12 +18,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
+//todo repair Context Error in networkConnection
+//todo change how FileManager work with NetworkConnection and SensorActivity
+//todo make auto-send function, when WIFI is available
 /*
- * sensors to read:
+ * sensorsClass to read:
  * 1  TYPE_GAME_ROTATION_VECTOR
  * 2  TYPE_GYROSCOPE
  * 3  TYPE_GRAVITY
@@ -40,14 +37,17 @@ import java.util.Set;
  *
  * */
 public class MainActivity extends Activity implements SensorEventListener {
+
     private SensorManager mSensorManager;
+    JSONObject postData = new JSONObject();
     List<Integer> sensorArrayList = new ArrayList<>();
     StringBuilder mInfo = new StringBuilder();
     StringBuilder mAcc = new StringBuilder("Акселерометр:");
     StringBuilder mLAcc = new StringBuilder("Линейный акселерометр:");
     StringDataBuilder strBuilder = new StringDataBuilder();
-    JSONObject postData = new JSONObject();
-    SensorActivity sensors = new SensorActivity();
+    String DATA;
+    SensorActivity sensorsClass = new SensorActivity();
+    //NetworkConnection network = new NetworkConnection();
 
     public void activateSensors(List<Integer> sensorList) {
         for (int i = 0; i < sensorList.size(); i++) {
@@ -72,24 +72,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
         sensorArrayList.add(Sensor.TYPE_ORIENTATION);
-        /*
-        mSensorManager.registerListener(this,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
 
-         */
-
-        /*
-        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-          magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-           sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-         sensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        * */
-
-
-        //FileManager1 fileManager=new FileManager1();
-
+        sensorsClass.importSensorList(sensorArrayList);
     }
 
     @Override
@@ -104,28 +88,26 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onResume();
     }
 
-    public void msgFunc() throws IOException {
-        sndFunc();
-    }
 
     @Override
     protected void onPause() {
         mSensorManager.unregisterListener(this);
-        Log.i("WIFI", "BEGINING");
+        //Log.i("WIFI", "BEGINING");
         try {
-            msgFunc();
+            //network.sndFunc("data");//send
+            sndFunc(sensorsClass.getDATA());//send
         } catch (IOException e) {
-            Log.i("WIFI", "ERR");
+            //Log.i("WIFI", "ERR");
             throw new RuntimeException(e);
         }
-        Log.i("WIFI", "END?????????????????????");
+        //Log.i("WIFI", "END?????????????????????");
         super.onPause();
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Log.i("SENSOR", "ZERO POINT_+_+_+_+_++__+_+_++_+__+_+_+_+_+_+_+");
-        sensors.onSensorChanged(event);
+        // Log.i("SENSOR", "ZERO POINT_+_+_+_+_++__+_+_++_+__+_+_+_+_+_+_+");
+        sensorsClass.onSensorChanged(event);
 
     }
 
@@ -149,22 +131,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 */
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    public void sndFunc() throws IOException {
+    public void sndFunc(String data) throws IOException {
         String postUrl = "http://192.168.1.197:80";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
 
         try {
-            postData.put("emailVolodar", "editTextEmail.getText().toString()");
-            // postData.put("password", "editTextPassword.getText().toString()");
-            // postData.put("rememberPassword", false);
-            // postData.put("ip_address", "1.41");
-            // postData.put("isCaptchaEnabled", false);
-
+            postData.put("emailVolodar", String.valueOf((System.currentTimeMillis())) + "_TIME@" + data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -184,4 +157,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         requestQueue.add(jsonObjectRequest);
     }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class FileManager1 extends AppCompatActivity {
     String saveData = "";
+
     public void addData(String dataToSaveAndSend){
         saveData = saveData+dataToSaveAndSend;
     }
