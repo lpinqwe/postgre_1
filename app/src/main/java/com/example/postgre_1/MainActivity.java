@@ -92,21 +92,16 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         mSensorManager.unregisterListener(this);
-        //Log.i("WIFI", "BEGINING");
         try {
-            //network.sndFunc("data");//send
             sndFunc(sensorsClass.getDATA());//send
         } catch (IOException e) {
-            //Log.i("WIFI", "ERR");
             throw new RuntimeException(e);
         }
-        //Log.i("WIFI", "END?????????????????????");
         super.onPause();
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Log.i("SENSOR", "ZERO POINT_+_+_+_+_++__+_+_++_+__+_+_+_+_+_+_+");
         sensorsClass.onSensorChanged(event);
 
     }
@@ -134,10 +129,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void sndFunc(String data) throws IOException {
         String postUrl = "http://192.168.1.197:80";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-
         try {
-            postData.put("emailVolodar", String.valueOf((System.currentTimeMillis())) + "_TIME@" + data);
+            postData.put("emailVolodar", (System.currentTimeMillis()) + "_TIME!" + data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,7 +138,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                //Toast.makeText(getApplicationContext(), "Response: "+response, Toast.LENGTH_LONG).show();
                 Log.i("WIFI_VOLLEY", "Response: " + response);
             }
         }, new Response.ErrorListener() {

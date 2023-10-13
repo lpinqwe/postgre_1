@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class NetworkConnection extends Activity {
     JSONObject postData = new JSONObject();
+
     public void sndFunc(String data) throws IOException {
         String postUrl = "http://192.168.1.197:80";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -22,11 +23,6 @@ public class NetworkConnection extends Activity {
 
         try {
             postData.put("emailVolodar", "editTextEmail.getText().toString()");
-            // postData.put("password", "editTextPassword.getText().toString()");
-            // postData.put("rememberPassword", false);
-            // postData.put("ip_address", "1.41");
-            // postData.put("isCaptchaEnabled", false);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
