@@ -1,6 +1,7 @@
 package com.example.postgre_1;
 
 import android.app.Activity;
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,11 +16,21 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
+import androidx.work.PeriodicWorkRequest;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.ExistingPeriodicWorkPolicy;
+
+import java.util.concurrent.TimeUnit;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-//todo repair Context Error in networkConnection
+import java.util.concurrent.TimeUnit;
+
 //todo change how FileManager work with NetworkConnection and SensorActivity
 //todo make auto-send function, when WIFI is available
 /*
@@ -47,7 +58,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     StringDataBuilder strBuilder = new StringDataBuilder();
     String DATA;
     SensorActivity sensorsClass = new SensorActivity();
-    //NetworkConnection network = new NetworkConnection();
+
 
     public void activateSensors(List<Integer> sensorList) {
         for (int i = 0; i < sensorList.size(); i++) {
@@ -59,7 +70,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -91,9 +105,15 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onPause() {
-        mSensorManager.unregisterListener(this);
+
         try {
-            sndFunc(sensorsClass.getDATA());//send
+            Log.i("WORKER", "SENDMESSAGEFUNCTION");
+            mSensorManager.unregisterListener(this);
+            NetworkConnection network=new NetworkConnection();
+            network.sndFunc("new_STR_1", this);
+            //sndFunc(sensorsClass.getDATA());//send
+            //sndFunc("new_STR");//send
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -126,29 +146,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 */
-    public void sndFunc(String data) throws IOException {
-        String postUrl = "http://192.168.1.197:80";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        try {
-            postData.put("emailVolodar", (System.currentTimeMillis()) + "_TIME!" + data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("WIFI_VOLLEY", "Response: " + response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-
-        requestQueue.add(jsonObjectRequest);
-    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
