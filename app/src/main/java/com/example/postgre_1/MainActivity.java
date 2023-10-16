@@ -1,38 +1,21 @@
 package com.example.postgre_1;
 
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import org.json.JSONException;
 import org.json.JSONObject;
-import androidx.work.PeriodicWorkRequest;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-import androidx.work.ExistingPeriodicWorkPolicy;
-
-import java.util.concurrent.TimeUnit;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 //todo change how FileManager work with NetworkConnection and SensorActivity
 //todo make auto-send function, when WIFI is available
+//todo change location of sensor listener, registrator etc.
 /*
  * sensorsClass to read:
  * 1  TYPE_GAME_ROTATION_VECTOR
@@ -110,8 +93,8 @@ public class MainActivity extends Activity implements SensorEventListener {
             Log.i("WORKER", "SENDMESSAGEFUNCTION");
             mSensorManager.unregisterListener(this);
             NetworkConnection network=new NetworkConnection();
-            network.sndFunc("new_STR_1", this);
-            //sndFunc(sensorsClass.getDATA());//send
+            //network.sndFunc("new_STR_1", this);
+            network.sndFunc(sensorsClass.getDATA(),this);//send
             //sndFunc("new_STR");//send
 
         } catch (IOException e) {
