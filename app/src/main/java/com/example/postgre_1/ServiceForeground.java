@@ -1,5 +1,5 @@
 package com.example.postgre_1;
 
-public class getSensorList {
+public class ServiceForeground {
 
 }

@@ -3,8 +3,7 @@ package com.example.postgre_1;
 public class StringDataBuilder {
     FloatToString floatToString = new FloatToString((float) 0);
 
-    public String defString = "insert into newdata\n" +
-            "(%s, data1, data2, data3,\"date\")\n" +
+    public String defString = "insert into newdata" +"(%s, data1, data2, data3,\"date\")" +
             "values\n" +
             "('volodar',%s,%s,%s,%s)\n" +
             ";";
