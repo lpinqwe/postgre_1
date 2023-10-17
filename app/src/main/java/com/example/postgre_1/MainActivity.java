@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import org.json.JSONObject;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 //todo change how FileManager work with NetworkConnection and SensorActivity
@@ -30,84 +28,49 @@ import java.util.List;
  * 10 TYPE_LIGHT
  *
  * */
-public class MainActivity extends Activity implements SensorEventListener {
+public class MainActivity extends Activity {
+        SensorManagerClass mSensorManager = new SensorManagerClass(this);
 
-    private SensorManager mSensorManager;
-    JSONObject postData = new JSONObject();
-    List<Integer> sensorArrayList = new ArrayList<>();
-    StringBuilder mInfo = new StringBuilder();
-    StringBuilder mAcc = new StringBuilder("Акселерометр:");
-    StringBuilder mLAcc = new StringBuilder("Линейный акселерометр:");
-    StringDataBuilder strBuilder = new StringDataBuilder();
-    String DATA;
-    SensorActivity sensorsClass = new SensorActivity();
+        NetworkConnection network=new NetworkConnection();
 
 
-    public void activateSensors(List<Integer> sensorList) {
-        for (int i = 0; i < sensorList.size(); i++) {
-            mSensorManager.registerListener(this,
-                    mSensorManager.getDefaultSensor(sensorList.get(i)),
-                    SensorManager.SENSOR_DELAY_NORMAL);
-        }
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
-        sensorArrayList.add(Sensor.TYPE_GAME_ROTATION_VECTOR);
-        sensorArrayList.add(Sensor.TYPE_GYROSCOPE);
-        sensorArrayList.add(Sensor.TYPE_GRAVITY);
-        sensorArrayList.add(Sensor.TYPE_PROXIMITY);
-        sensorArrayList.add(Sensor.TYPE_ACCELEROMETER);
-        sensorArrayList.add(Sensor.TYPE_ROTATION_VECTOR);
-        sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
-        sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
-        sensorArrayList.add(Sensor.TYPE_ORIENTATION);
+        mSensorManager.onCreateSensors();
+        mSensorManager.activateSensors();
 
-        sensorsClass.importSensorList(sensorArrayList);
     }
 
     @Override
     protected void onStart() {
-        activateSensors(sensorArrayList);
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-
+        //mSensorManager.sensorRegister();
         super.onResume();
     }
 
 
     @Override
     protected void onPause() {
-
         try {
-            Log.i("WORKER", "SENDMESSAGEFUNCTION");
-            mSensorManager.unregisterListener(this);
-            NetworkConnection network=new NetworkConnection();
-            //network.sndFunc("new_STR_1", this);
-            network.sndFunc(sensorsClass.getDATA(),this);//send
-            //sndFunc("new_STR");//send
-
+            mSensorManager.sensorRegister();
+            network.sndFunc(mSensorManager.getDATA(),this);//send
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         super.onPause();
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        sensorsClass.onSensorChanged(event);
 
-    }
 
     /*
     public void onSensorChanged(SensorEvent event) {
@@ -129,10 +92,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 */
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
 
 
 }
