@@ -23,6 +23,9 @@ public class FileManager1 extends AppCompatActivity {
     public String getData(){
         return this.saveData;
     }
+    public void clearData(){
+        saveData="";
+    }
 
 
 }

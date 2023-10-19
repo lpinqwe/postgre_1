@@ -49,9 +49,6 @@ public void onCreateSensors(){
     sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
     sensorArrayList.add(Sensor.TYPE_ORIENTATION);
     Log.i("SENSOR_ADD","addedSensor");
-
-    //activateSensors();
-
 }
     public void activateSensors() {
         for (int i = 0; i < sensorArrayList.size(); i++) {
@@ -63,9 +60,6 @@ public void onCreateSensors(){
     public void sensorRegister(){
         Log.i("WORKER", "SENDMESSAGEFUNCTION");
         mSensorManager.unregisterListener(this);
-        //NetworkConnection network=new NetworkConnection();
-        //network.sndFunc(.getDATA(),context_1);//send
-
     }
 
 
@@ -81,7 +75,7 @@ public void onCreateSensors(){
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION  ) {getValues(event,"TYPE_LINEAR_ACCELERATION");}
         if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE  ) {getValues(event,"TYPE_AMBIENT_TEMPERATURE");}
         if (event.sensor.getType() == Sensor.TYPE_LIGHT                ) {getValues(event,"TYPE_LIGHT");}
-        //onSensorChanged(event);
+        //onSensorChanged(event);//looped looop
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -89,17 +83,21 @@ public void onCreateSensors(){
     private void getValues(SensorEvent event, String type) {
         float[] values = event.values;
         float x = values[0];
-        //float y = values[1];
-        //float z = values[2];
-        //Log.println(Log.DEBUG, "SENSOR_VALUES#########################\n#######################", Arrays.toString(values));
         fileManager1.addData((type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@"));
         SENSOR_DATA = SENSOR_DATA+(type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@");
-        //Log.i("SENSORS", "ACCELEROMETER" + x +  " ");
     }
     public String getDATA(){
          Log.i("importantData",fileManager1.getData());
          Log.i("sensorData",SENSOR_DATA);
         return fileManager1.getData();
+    }
+    public void clearData(){
+        SENSOR_DATA="";
+        fileManager1.clearData();
+        Log.i("importantDataClear",fileManager1.getData());
+
+        Log.i("sensorDataClear",SENSOR_DATA);
+
     }
 
 }

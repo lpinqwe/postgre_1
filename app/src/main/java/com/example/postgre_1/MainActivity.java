@@ -1,11 +1,13 @@
 package com.example.postgre_1;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -28,7 +30,7 @@ import java.io.IOException;
  * 10 TYPE_LIGHT
  *
  * */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
         SensorManagerClass mSensorManager = new SensorManagerClass(this);
 
         NetworkConnection network=new NetworkConnection();
@@ -41,13 +43,16 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSensorManager.onCreateSensors();
-        mSensorManager.activateSensors();
-
+        //mSensorManager.onCreateSensors();
+        //mSensorManager.activateSensors();
     }
 
     @Override
     protected void onStart() {
+        Log.i("Service","ZERO_POINT");
+
+        startService(new Intent( this, ServiceForeground.class ) );
+
         super.onStart();
     }
 
@@ -60,13 +65,14 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
+       /*
         try {
             mSensorManager.sensorRegister();
             network.sndFunc(mSensorManager.getDATA(),this);//send
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+*/
         super.onPause();
     }
 
