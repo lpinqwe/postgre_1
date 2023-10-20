@@ -1,4 +1,5 @@
 package com.example.postgre_1;
+import android.widget.Toast;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,10 +8,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import static android.app.PendingIntent.getActivity;
 
 
 //todo change how FileManager work with NetworkConnection and SensorActivity
@@ -31,9 +37,9 @@ import java.io.IOException;
  *
  * */
 public class MainActivity extends AppCompatActivity {
-        SensorManagerClass mSensorManager = new SensorManagerClass(this);
+      //  SensorManagerClass mSensorManager = new SensorManagerClass(this);
 
-        NetworkConnection network=new NetworkConnection();
+    // NetworkConnection network=new NetworkConnection();
 
 
 
@@ -42,9 +48,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //ButtonClass buttons = new ButtonClass(this);
+        //Button buttona, buttonb,button3;
+        //buttonb = findViewById(R.id.button2);
+        //buttons.activateButton();
         //mSensorManager.onCreateSensors();
         //mSensorManager.activateSensors();
+        Button button = (Button)findViewById(R.id.button1);
+
+        // operations to be performed
+        // when user tap on the button
+        if (button != null) {
+            button.setOnClickListener((View.OnClickListener)(new View.OnClickListener() {
+                public final void onClick(View it) {
+                    Log.i("button","button");
+                    CharSequence text = "Hello toast!";
+                    // displaying a toast message
+                    Toast.makeText(MainActivity.this, "(String)text", Toast.LENGTH_SHORT).show();
+                }
+            }));
+        }
     }
 
     @Override

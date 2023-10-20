@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">postgre_1</string>
+    <string name="message">messagege</string>
 </resources>
