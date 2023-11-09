@@ -22,6 +22,8 @@ public class ServiceForeground extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("service Started", "service Started");
+        mSensorManager.addData(("$"+"started"+"@"+System.currentTimeMillis()));
+
         mSensorManager.onCreateSensors();
         mSensorManager.activateSensors();
         handler.postDelayed(runnable, 10000); // Запускаем через 10 секунд
@@ -48,7 +50,9 @@ public class ServiceForeground extends Service {
     public void onDestroy() {
         try {
             mSensorManager.sensorRegister();
+            mSensorManager.addData(("$"+"destroyed"+"@"+System.currentTimeMillis()));
             network.sndFunc(mSensorManager.getDATA(), this);//send
+
             mSensorManager.clearData();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -62,5 +66,9 @@ public class ServiceForeground extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    public void intentData(String data){
+        mSensorManager.addData(data);
     }
 }

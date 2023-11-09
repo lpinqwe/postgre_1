@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
       //  SensorManagerClass mSensorManager = new SensorManagerClass(this);
 
     // NetworkConnection network=new NetworkConnection();
-
+FileManager1 fileMNG = new FileManager1();
+NetworkConnection network = new NetworkConnection();
 
 
 
@@ -48,23 +49,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //ButtonClass buttons = new ButtonClass(this);
-        //Button buttona, buttonb,button3;
-        //buttonb = findViewById(R.id.button2);
-        //buttons.activateButton();
-        //mSensorManager.onCreateSensors();
-        //mSensorManager.activateSensors();
-        Button button = (Button)findViewById(R.id.button1);
+
+        Button button1 = (Button)findViewById(R.id.button1);
+        Button button2 = (Button)findViewById(R.id.button2);
+        Button button3 = (Button)findViewById(R.id.button3);
 
         // operations to be performed
         // when user tap on the button
-        if (button != null) {
-            button.setOnClickListener((View.OnClickListener)(new View.OnClickListener() {
+        if (button1 != null) {
+            button1.setOnClickListener((View.OnClickListener)(new View.OnClickListener() {
                 public final void onClick(View it) {
-                    Log.i("button","button");
-                    CharSequence text = "Hello toast!";
-                    // displaying a toast message
-                    Toast.makeText(MainActivity.this, "(String)text", Toast.LENGTH_SHORT).show();
+                    Log.i("button","button1");
+                    //        fileManager1.addData((type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@"));
+                    fileMNG.addData(("$"+"BUTTON_1"+"@"+fileMNG.msgCurrentTime()+"&"));
+                }
+            }));
+        }
+        if (button2 != null) {
+            button2.setOnClickListener((View.OnClickListener)(new View.OnClickListener() {
+                public final void onClick(View it) {
+                    Log.i("button","button2");
+                    fileMNG.addData(("$"+"BUTTON_2"+"@"+fileMNG.msgCurrentTime()));
+
+                }
+            }));
+        }
+        if (button3 != null) {
+            button3.setOnClickListener((View.OnClickListener)(new View.OnClickListener() {
+                public final void onClick(View it) {
+                    Log.i("button","button3");
+                    fileMNG.addData(("$"+"BUTTON_3"+"@"+fileMNG.msgCurrentTime()));
+
                 }
             }));
         }
@@ -88,39 +103,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-       /*
         try {
-            mSensorManager.sensorRegister();
-            network.sndFunc(mSensorManager.getDATA(),this);//send
+            network.sndFunc(fileMNG.getData(), this);//send
+            fileMNG.clearData();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-*/
+
         super.onPause();
     }
 
-
-
-    /*
-    public void onSensorChanged(SensorEvent event) {
-        mInfo = new StringBuilder();
-
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            mAcc = new StringBuilder("акселерометр:");
-            for (int valuesD = 0; valuesD <= event.values.length - 1; valuesD++) {
-                mAcc.append("\n" + event.values[valuesD]);
-            }
-            String loacalStrToSend = strBuilder.AddData("mac", event.values);
-
-        }
-        mInfo.append(String.format("%1$s\n", mAcc));
-
-        TextView tv_sensors = (TextView) findViewById(R.id.textView2);
-
-        tv_sensors.setText(mInfo.toString());
-
-    }
-*/
 
 
 }

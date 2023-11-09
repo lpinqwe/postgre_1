@@ -27,7 +27,7 @@ import static androidx.core.content.ContextCompat.getSystemService;
  * 10 TYPE_LIGHT
  */
 public class SensorManagerClass implements SensorEventListener {
-    String SENSOR_DATA = "";
+   // String SENSOR_DATA = "";
     private android.hardware.SensorManager mSensorManager;
     List<Integer> sensorArrayList = new ArrayList<>();
     FileManager1 fileManager1= new FileManager1();
@@ -83,21 +83,27 @@ public void onCreateSensors(){
     private void getValues(SensorEvent event, String type) {
         float[] values = event.values;
         float x = values[0];
-        fileManager1.addData((type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@"));
-        SENSOR_DATA = SENSOR_DATA+(type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@");
+        fileManager1.addData(("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()));
+        //SENSOR_DATA = SENSOR_DATA+("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@");
+    }
+    public void addData(String data){
+        fileManager1.addData(("$"+data+"@"+fileManager1.msgCurrentTime()));
+
     }
     public String getDATA(){
          Log.i("importantData",fileManager1.getData());
-         Log.i("sensorData",SENSOR_DATA);
+        // Log.i("sensorData",SENSOR_DATA);
         return fileManager1.getData();
     }
     public void clearData(){
-        SENSOR_DATA="";
+        //SENSOR_DATA="";
         fileManager1.clearData();
         Log.i("importantDataClear",fileManager1.getData());
 
-        Log.i("sensorDataClear",SENSOR_DATA);
+       // Log.i("sensorDataClear",SENSOR_DATA);
 
     }
+    //todo make it better....
+
 
 }

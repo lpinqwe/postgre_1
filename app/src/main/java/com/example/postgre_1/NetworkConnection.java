@@ -13,12 +13,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import android.provider.Settings.Secure;
 
 public class NetworkConnection  {
+    //private String android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
 
     JSONObject postData = new JSONObject();
 
     public void sndFunc(String data,Context context) throws IOException {
+        //String postUrl = "http://192.168.99.106:80";//todo use system environment
         String postUrl = "http://192.168.1.197:80";
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
