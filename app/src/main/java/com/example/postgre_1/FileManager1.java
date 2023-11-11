@@ -16,10 +16,6 @@ public class FileManager1 extends AppCompatActivity {
     public String msgCurrentTime(){
         return String.valueOf((System.currentTimeMillis()));
     }
-    public void cleanData(){
-        saveData = "";
-    }
-
     public String getData(){
         return this.saveData;
     }

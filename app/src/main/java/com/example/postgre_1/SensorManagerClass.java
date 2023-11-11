@@ -6,13 +6,12 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static android.content.Context.SENSOR_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
+
 /*
  * sensorsClass to read:
  * 1  TYPE_GAME_ROTATION_VECTOR
@@ -65,22 +64,32 @@ public void onCreateSensors(){
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR ) {getValues(event,"TYPE_GAME_ROTATION_VECTOR");}
-        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE            ) {getValues(event,"TYPE_GYROSCOPE");}
-        if (event.sensor.getType() == Sensor.TYPE_GRAVITY              ) {getValues(event,"TYPE_GRAVITY");}
-        if (event.sensor.getType() == Sensor.TYPE_ORIENTATION          ) {getValues(event,"TYPE_ORIENTATION");}
-        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY            ) {getValues(event,"TYPE_PROXIMITY");}
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER        ) {getValues(event, "TYPE_ACCELEROMETER");}
-        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR      ) {getValues(event,"TYPE_ROTATION_VECTOR");}
-        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION  ) {getValues(event,"TYPE_LINEAR_ACCELERATION");}
-        if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE  ) {getValues(event,"TYPE_AMBIENT_TEMPERATURE");}
-        if (event.sensor.getType() == Sensor.TYPE_LIGHT                ) {getValues(event,"TYPE_LIGHT");}
+        if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR ) {
+            eventValues(event,"TYPE_GAME_ROTATION_VECTOR");}
+        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE            ) {
+            eventValues(event,"TYPE_GYROSCOPE");}
+        if (event.sensor.getType() == Sensor.TYPE_GRAVITY              ) {
+            eventValues(event,"TYPE_GRAVITY");}
+        if (event.sensor.getType() == Sensor.TYPE_ORIENTATION          ) {
+            eventValues(event,"TYPE_ORIENTATION");}
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY            ) {
+            eventValues(event,"TYPE_PROXIMITY");}
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER        ) {
+            eventValues(event, "TYPE_ACCELEROMETER");}
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR      ) {
+            eventValues(event,"TYPE_ROTATION_VECTOR");}
+        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION  ) {
+            eventValues(event,"TYPE_LINEAR_ACCELERATION");}
+        if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE  ) {
+            eventValues(event,"TYPE_AMBIENT_TEMPERATURE");}
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT                ) {
+            eventValues(event,"TYPE_LIGHT");}
         //onSensorChanged(event);//looped looop
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
-    private void getValues(SensorEvent event, String type) {
+    private void eventValues(SensorEvent event, String type) {
         float[] values = event.values;
         float x = values[0];
         fileManager1.addData(("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()));

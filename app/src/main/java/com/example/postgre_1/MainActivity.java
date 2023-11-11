@@ -61,7 +61,7 @@ NetworkConnection network = new NetworkConnection();
                 public final void onClick(View it) {
                     Log.i("button","button1");
                     //        fileManager1.addData((type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@"));
-                    fileMNG.addData(("$"+"BUTTON_1"+"@"+fileMNG.msgCurrentTime()+"&"));
+                    fileMNG.addData(("$"+"BUTTON_1"+"@"+fileMNG.msgCurrentTime()));
                 }
             }));
         }

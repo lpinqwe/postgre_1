@@ -22,7 +22,7 @@ public class ServiceForeground extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("service Started", "service Started");
-        mSensorManager.addData(("$"+"started"+"@"+System.currentTimeMillis()));
+        mSensorManager.addData(("started"));
 
         mSensorManager.onCreateSensors();
         mSensorManager.activateSensors();
@@ -50,7 +50,7 @@ public class ServiceForeground extends Service {
     public void onDestroy() {
         try {
             mSensorManager.sensorRegister();
-            mSensorManager.addData(("$"+"destroyed"+"@"+System.currentTimeMillis()));
+            mSensorManager.addData(("destroyed"));
             network.sndFunc(mSensorManager.getDATA(), this);//send
 
             mSensorManager.clearData();
@@ -68,7 +68,4 @@ public class ServiceForeground extends Service {
         return null;
     }
 
-    public void intentData(String data){
-        mSensorManager.addData(data);
-    }
 }

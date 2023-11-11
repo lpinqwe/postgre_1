@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import android.provider.Settings.Secure;
 
+import static android.os.Build.USER;
+
 public class NetworkConnection  {
     //private String android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
 
@@ -27,7 +29,7 @@ public class NetworkConnection  {
 
 
         try {
-            postData.put("emailVolodar", data);
+            postData.put("user_volodar", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
