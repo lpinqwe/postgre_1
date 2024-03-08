@@ -34,7 +34,7 @@ public class SensorManagerClass implements SensorEventListener {
      SensorManagerClass(Context context){
         this.context_1 = context;
     }
-public void onCreateSensors(){
+    public void onCreateSensors(){
 
     mSensorManager = (android.hardware.SensorManager) context_1.getSystemService(SENSOR_SERVICE);
 
@@ -64,6 +64,8 @@ public void onCreateSensors(){
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        Log.i("WORKER", "sensors changed");
+
         if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR ) {
             eventValues(event,"TYPE_GAME_ROTATION_VECTOR");}
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE            ) {

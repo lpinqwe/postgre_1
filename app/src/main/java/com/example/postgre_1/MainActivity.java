@@ -18,10 +18,6 @@ import java.io.IOException;
 
 import static android.app.PendingIntent.getActivity;
 
-
-//todo change how FileManager work with NetworkConnection and SensorActivity
-//todo make auto-send function, when WIFI is available
-//todo change location of sensor listener, registrator etc.
 /*
  * sensorsClass to read:
  * 1  TYPE_GAME_ROTATION_VECTOR
@@ -37,9 +33,8 @@ import static android.app.PendingIntent.getActivity;
  *
  * */
 public class MainActivity extends AppCompatActivity {
-      //  SensorManagerClass mSensorManager = new SensorManagerClass(this);
+    SensorManagerClass mSensorManager = new SensorManagerClass(this);
 
-    // NetworkConnection network=new NetworkConnection();
 FileManager1 fileMNG = new FileManager1();
 NetworkConnection network = new NetworkConnection();
 
@@ -48,6 +43,10 @@ NetworkConnection network = new NetworkConnection();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mSensorManager.onCreateSensors();
+        mSensorManager.activateSensors();
+
         setContentView(R.layout.activity_main);
 
         Button button1 = (Button)findViewById(R.id.button1);
@@ -88,15 +87,11 @@ NetworkConnection network = new NetworkConnection();
     @Override
     protected void onStart() {
         Log.i("Service","ZERO_POINT");
-
-        startService(new Intent( this, ServiceForeground.class ) );
-
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        //mSensorManager.sensorRegister();
         super.onResume();
     }
 
@@ -104,8 +99,17 @@ NetworkConnection network = new NetworkConnection();
     @Override
     protected void onPause() {
         try {
+            Log.i("PAUSE", String.format("PAUSE DATA SEND %d",System.currentTimeMillis()));
+            mSensorManager.sensorRegister();
+
+            fileMNG.addData(mSensorManager.getDATA());
             network.sndFunc(fileMNG.getData(), this);//send
+            mSensorManager.clearData();
             fileMNG.clearData();
+            //mSensorManager.sensorRegister();
+            //Log.i("INFO",mSensorManager.getDATA());
+            //network.sndFunc(mSensorManager.getDATA(),this);//send
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

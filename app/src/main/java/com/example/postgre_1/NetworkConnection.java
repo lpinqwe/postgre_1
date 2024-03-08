@@ -24,7 +24,7 @@ public class NetworkConnection  {
 
     public void sndFunc(String data,Context context) throws IOException {
         //String postUrl = "http://192.168.99.106:80";//todo use system environment
-        String postUrl = "http://192.168.1.197:80";
+        String postUrl = "http://192.168.1.197:5000";
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
 
@@ -35,6 +35,7 @@ public class NetworkConnection  {
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject response) {
                 //Toast.makeText(getApplicationContext(), "Response: "+response, Toast.LENGTH_LONG).show();
@@ -43,6 +44,7 @@ public class NetworkConnection  {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.i("ERRROR", String.valueOf(error));
                 error.printStackTrace();
             }
         });
