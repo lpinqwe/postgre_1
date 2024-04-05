@@ -1,23 +1,17 @@
 package com.example.postgre_1;
 
-import android.widget.Toast;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import org.json.JSONObject;
+
 
 import java.io.IOException;
 
-import static android.app.PendingIntent.getActivity;
+
 
 /*
  * sensorsClass to read:

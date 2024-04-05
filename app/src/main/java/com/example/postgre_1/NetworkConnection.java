@@ -1,6 +1,5 @@
 package com.example.postgre_1;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import com.android.volley.Request;
@@ -9,14 +8,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
-import android.provider.Settings.Secure;
-
-import static android.os.Build.USER;
 
 public class NetworkConnection {
     //private String android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
@@ -26,10 +20,9 @@ public class NetworkConnection {
     public void sndFunc(JSONObject data, Context context) throws IOException {
         //String postUrl = "http://192.168.99.106:80";//todo use system environment
         //String postUrl = "http://192.168.1.197:5000";
-        String postUrl =this.URL;
+        String postUrl = this.URL;
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         this.postData = data;
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
 
             @Override

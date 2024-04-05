@@ -6,11 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class FileManager1 extends AppCompatActivity {
     String saveData = "";
     JSONObject my_msg;

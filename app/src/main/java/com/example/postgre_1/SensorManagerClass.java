@@ -9,7 +9,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -100,19 +99,7 @@ public class SensorManagerClass implements SensorEventListener {
         fileManager1.addJsonData(type,Arrays.toString(values),fileManager1.msgCurrentTime());
         //SENSOR_DATA = SENSOR_DATA+("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@");
     }
-//    public String getDATA(){
-//         Log.i("importantData",fileManager1.getData());
-//        // Log.i("sensorData",SENSOR_DATA);
-//        return fileManager1.getData();
-//    }
-//    public void clearData(){
-//        //SENSOR_DATA="";
-//        fileManager1.clearData();
-//        Log.i("importantDataClear",fileManager1.getData());
-//
-//       // Log.i("sensorDataClear",SENSOR_DATA);
-//
-//    }
+
     //todo make it better....
 
 
