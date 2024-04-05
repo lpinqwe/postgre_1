@@ -13,26 +13,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
 import android.provider.Settings.Secure;
 
 import static android.os.Build.USER;
 
-public class NetworkConnection  {
+public class NetworkConnection {
     //private String android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
+    String URL = "http://192.168.1.163:5000";
+    JSONObject postData;
 
-    JSONObject postData = new JSONObject();
-
-    public void sndFunc(String data,Context context) throws IOException {
+    public void sndFunc(JSONObject data, Context context) throws IOException {
         //String postUrl = "http://192.168.99.106:80";//todo use system environment
-        String postUrl = "http://192.168.1.197:5000";
+        //String postUrl = "http://192.168.1.197:5000";
+        String postUrl =this.URL;
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-
-        try {
-            postData.put("user_volodar", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        this.postData = data;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
 

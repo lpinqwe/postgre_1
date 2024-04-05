@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -29,10 +30,12 @@ public class SensorManagerClass implements SensorEventListener {
    // String SENSOR_DATA = "";
     private android.hardware.SensorManager mSensorManager;
     List<Integer> sensorArrayList = new ArrayList<>();
-    FileManager1 fileManager1= new FileManager1();
+    //FileManager1 fileManager1= new FileManager1();
     Context context_1;
-     SensorManagerClass(Context context){
+    FileManager1 fileManager1;
+     SensorManagerClass(Context context,FileManager1 fileManager){
         this.context_1 = context;
+        this.fileManager1 = fileManager;
     }
     public void onCreateSensors(){
 
@@ -93,27 +96,23 @@ public class SensorManagerClass implements SensorEventListener {
     }
     private void eventValues(SensorEvent event, String type) {
         float[] values = event.values;
-        float x = values[0];
-        fileManager1.addData(("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()));
+        //fileManager1.addData(("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()));
+        fileManager1.addJsonData(type,Arrays.toString(values),fileManager1.msgCurrentTime());
         //SENSOR_DATA = SENSOR_DATA+("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@");
     }
-    public void addData(String data){
-        fileManager1.addData(("$"+data+"@"+fileManager1.msgCurrentTime()));
-
-    }
-    public String getDATA(){
-         Log.i("importantData",fileManager1.getData());
-        // Log.i("sensorData",SENSOR_DATA);
-        return fileManager1.getData();
-    }
-    public void clearData(){
-        //SENSOR_DATA="";
-        fileManager1.clearData();
-        Log.i("importantDataClear",fileManager1.getData());
-
-       // Log.i("sensorDataClear",SENSOR_DATA);
-
-    }
+//    public String getDATA(){
+//         Log.i("importantData",fileManager1.getData());
+//        // Log.i("sensorData",SENSOR_DATA);
+//        return fileManager1.getData();
+//    }
+//    public void clearData(){
+//        //SENSOR_DATA="";
+//        fileManager1.clearData();
+//        Log.i("importantDataClear",fileManager1.getData());
+//
+//       // Log.i("sensorDataClear",SENSOR_DATA);
+//
+//    }
     //todo make it better....
 
 
