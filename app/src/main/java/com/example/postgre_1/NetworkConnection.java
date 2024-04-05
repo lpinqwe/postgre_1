@@ -13,13 +13,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class NetworkConnection {
-    //private String android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
-    String URL = "http://192.168.1.163:5000";
+    // Лучше установить доменное имя или внешний IP-адрес сервера вместо использования локального IP
+    String URL = "http://192.168.1.163:5000"; // Замените "your_domain_or_ip" на ваш домен или IP-адрес
+
     JSONObject postData;
 
     public void sndFunc(JSONObject data, Context context) throws IOException {
-        //String postUrl = "http://192.168.99.106:80";//todo use system environment
-        //String postUrl = "http://192.168.1.197:5000";
         String postUrl = this.URL;
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         this.postData = data;
@@ -27,7 +26,6 @@ public class NetworkConnection {
 
             @Override
             public void onResponse(JSONObject response) {
-                //Toast.makeText(getApplicationContext(), "Response: "+response, Toast.LENGTH_LONG).show();
                 Log.i("WIFI_VOLLEY", "Response: " + response);
             }
         }, new Response.ErrorListener() {
