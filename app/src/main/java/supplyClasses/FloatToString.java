@@ -1,4 +1,4 @@
-package com.example.postgre_1;
+package supplyClasses;
 
 public class FloatToString {
     public FloatToString(float floatNumber) {

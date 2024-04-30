@@ -1,4 +1,4 @@
-package com.example.postgre_1;
+package supplyClasses;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,7 +14,8 @@ import java.io.IOException;
 
 public class NetworkConnection {
     // Лучше установить доменное имя или внешний IP-адрес сервера вместо использования локального IP
-    String URL = "http://192.168.1.163:5000"; // Замените "your_domain_or_ip" на ваш домен или IP-адрес
+    //String URL = "http://192.168.1.163:5000"; // Замените "your_domain_or_ip" на ваш домен или IP-адрес
+    String URL = "https://servervolodar.gorelikov.online"; // Замените "your_domain_or_ip" на ваш домен или IP-адрес
 
     JSONObject postData;
 

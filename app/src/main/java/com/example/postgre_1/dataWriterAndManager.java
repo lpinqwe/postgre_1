@@ -6,12 +6,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FileManager1 extends AppCompatActivity {
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+public class dataWriterAndManager extends AppCompatActivity {
     String saveData = "";
     JSONObject my_msg;
     JSONArray my_data;
 
-    public FileManager1() {
+    public dataWriterAndManager() {
         this.my_msg = new JSONObject();
         this.my_data = new JSONArray();
         try {
@@ -21,7 +24,7 @@ public class FileManager1 extends AppCompatActivity {
         }
     }
 
-    public FileManager1(String username) {
+    public dataWriterAndManager(String username) {
         this.my_msg = new JSONObject();
         this.my_data = new JSONArray();
         try {
@@ -36,12 +39,12 @@ public class FileManager1 extends AppCompatActivity {
         saveData = saveData + dataToSaveAndSend;
     }
 
-    public void addJsonData(String type, String value, String time) {
+    public void addJsonData(String type, float[] value, long time) {
         JSONObject temp = new JSONObject();
         try {
             Log.i("JSON info",type);
-            temp.put("name", type);
-            temp.put("value", value);
+            temp.put("name",  type);
+            temp.put("value", Arrays.toString(value));
             temp.put("time", time);
             this.my_data.put(temp);
         } catch (JSONException e) {
@@ -49,8 +52,8 @@ public class FileManager1 extends AppCompatActivity {
         }
     }
 
-    public String msgCurrentTime() {
-        return String.valueOf((System.currentTimeMillis()));
+    public long msgCurrentTime() {
+        return System.currentTimeMillis();
     }
 
     public String getData() {

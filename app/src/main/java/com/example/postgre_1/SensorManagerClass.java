@@ -26,15 +26,13 @@ import static android.content.Context.SENSOR_SERVICE;
  * 10 TYPE_LIGHT
  */
 public class SensorManagerClass implements SensorEventListener {
-   // String SENSOR_DATA = "";
     private android.hardware.SensorManager mSensorManager;
     List<Integer> sensorArrayList = new ArrayList<>();
-    //FileManager1 fileManager1= new FileManager1();
     Context context_1;
-    FileManager1 fileManager1;
-     SensorManagerClass(Context context,FileManager1 fileManager){
+    dataWriterAndManager dataWriterAndManager;
+     SensorManagerClass(Context context, dataWriterAndManager fileManager){
         this.context_1 = context;
-        this.fileManager1 = fileManager;
+        this.dataWriterAndManager = fileManager;
     }
     public void onCreateSensors(){
 
@@ -88,16 +86,13 @@ public class SensorManagerClass implements SensorEventListener {
             eventValues(event,"TYPE_AMBIENT_TEMPERATURE");}
         if (event.sensor.getType() == Sensor.TYPE_LIGHT                ) {
             eventValues(event,"TYPE_LIGHT");}
-        //onSensorChanged(event);//looped looop
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
     private void eventValues(SensorEvent event, String type) {
         float[] values = event.values;
-        //fileManager1.addData(("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()));
-        fileManager1.addJsonData(type,Arrays.toString(values),fileManager1.msgCurrentTime());
-        //SENSOR_DATA = SENSOR_DATA+("$"+type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@");
+        dataWriterAndManager.addJsonData(type,values, dataWriterAndManager.msgCurrentTime());
     }
 
     //todo make it better....

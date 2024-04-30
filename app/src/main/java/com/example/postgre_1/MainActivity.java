@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import supplyClasses.NetworkConnection;
 
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.io.IOException;
  * */
 public class MainActivity extends AppCompatActivity {
 
-    FileManager1 fileMNG = new FileManager1();
+    dataWriterAndManager fileMNG = new dataWriterAndManager();
     SensorManagerClass mSensorManager = new SensorManagerClass(this, fileMNG);
     NetworkConnection network = new NetworkConnection();
 
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("button", "button1");
                     //        fileManager1.addData((type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@"));
                     //fileMNG.addData(("$" + "BUTTON_1" + "@" + fileMNG.msgCurrentTime()));
-                    fileMNG.addJsonData("button","1",fileMNG.msgCurrentTime());
+                    float index[] = {1};
+                    fileMNG.addJsonData("button",index,fileMNG.msgCurrentTime());
                 }
             }));
         }
@@ -64,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 public final void onClick(View it) {
                     Log.i("button", "button2");
                     //fileMNG.addData(("$" + "BUTTON_2" + "@" + fileMNG.msgCurrentTime()));
-                    fileMNG.addJsonData("button","2",fileMNG.msgCurrentTime());
+                    float index[] = {2};
+                    fileMNG.addJsonData("button",index,fileMNG.msgCurrentTime());
 
 
                 }
@@ -75,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 public final void onClick(View it) {
                     Log.i("button", "button3");
                     //fileMNG.addData(("$" + "BUTTON_3" + "@" + fileMNG.msgCurrentTime()));
-                    fileMNG.addJsonData("button","3",fileMNG.msgCurrentTime());
+                    float index[]={3};
+                    fileMNG.addJsonData("button",index,fileMNG.msgCurrentTime());
 
                 }
             }));
