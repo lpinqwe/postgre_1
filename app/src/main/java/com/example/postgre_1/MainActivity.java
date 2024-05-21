@@ -1,12 +1,15 @@
 package com.example.postgre_1;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import supplyClasses.DeviceUtils;
 import supplyClasses.NetworkConnection;
 
 
@@ -31,19 +34,24 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     dataWriterAndManager fileMNG = new dataWriterAndManager();
+
+    DeviceUtils util_ = new DeviceUtils();
     SensorManagerClass mSensorManager = new SensorManagerClass(this, fileMNG);
     NetworkConnection network = new NetworkConnection();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        fileMNG.name= String.format( util_.getAndroidID(this));
+        fileMNG.app_version="0.0_default";
         super.onCreate(savedInstanceState);
 
         mSensorManager.onCreateSensors();
         mSensorManager.activateSensors();
 
         setContentView(R.layout.activity_main);
-
+        TextView tv=findViewById(R.id.textView2);
+        tv.setText(fileMNG.app_version+"\n"+fileMNG.name);
         Button button1 = (Button) findViewById(R.id.button1);
         Button button2 = (Button) findViewById(R.id.button2);
         Button button3 = (Button) findViewById(R.id.button3);
