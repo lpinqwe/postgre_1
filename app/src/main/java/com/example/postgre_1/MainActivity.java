@@ -1,7 +1,6 @@
 package com.example.postgre_1;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +13,6 @@ import supplyClasses.NetworkConnection;
 
 
 import java.io.IOException;
-
 
 
 /*
@@ -35,62 +33,57 @@ public class MainActivity extends AppCompatActivity {
 
     dataWriterAndManager fileMNG = new dataWriterAndManager();
 
-    DeviceUtils util_ = new DeviceUtils();
     SensorManagerClass mSensorManager = new SensorManagerClass(this, fileMNG);
     NetworkConnection network = new NetworkConnection();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        fileMNG.name= String.format( util_.getAndroidID(this));
-        fileMNG.app_version="0.0_default";
+        fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
+        fileMNG.app_version = "0.0_default";
         super.onCreate(savedInstanceState);
 
         mSensorManager.onCreateSensors();
         mSensorManager.activateSensors();
 
         setContentView(R.layout.activity_main);
-        TextView tv=findViewById(R.id.textView2);
-        tv.setText(fileMNG.app_version+"\n"+fileMNG.name);
-        Button button1 = (Button) findViewById(R.id.button1);
-        Button button2 = (Button) findViewById(R.id.button2);
-        Button button3 = (Button) findViewById(R.id.button3);
+        TextView tv = findViewById(R.id.textView2);
+        tv.setText(String.format("%s\n%s", fileMNG.app_version, fileMNG.name));
+        Button button1 = findViewById(R.id.button1);
+        Button button2 = findViewById(R.id.button2);
+        Button button3 = findViewById(R.id.button3);
 
         // operations to be performed
         // when user tap on the button
         if (button1 != null) {
-            button1.setOnClickListener((View.OnClickListener) (new View.OnClickListener() {
-                public final void onClick(View it) {
+            button1.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View it) {
                     Log.i("button", "button1");
-                    //        fileManager1.addData((type+"@"+ Arrays.toString(values)+"@"+fileManager1.msgCurrentTime()+"@@@"));
-                    //fileMNG.addData(("$" + "BUTTON_1" + "@" + fileMNG.msgCurrentTime()));
-                    float index[] = {1};
-                    fileMNG.addJsonData("button",index,fileMNG.msgCurrentTime());
+                    float[] index = {1};
+                    fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
                 }
-            }));
+            });
         }
         if (button2 != null) {
-            button2.setOnClickListener((View.OnClickListener) (new View.OnClickListener() {
-                public final void onClick(View it) {
+            button2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View it) {
                     Log.i("button", "button2");
-                    //fileMNG.addData(("$" + "BUTTON_2" + "@" + fileMNG.msgCurrentTime()));
-                    float index[] = {2};
-                    fileMNG.addJsonData("button",index,fileMNG.msgCurrentTime());
+                    float[] index = {2};
+                    fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
 
 
                 }
-            }));
+            });
         }
         if (button3 != null) {
-            button3.setOnClickListener((View.OnClickListener) (new View.OnClickListener() {
-                public final void onClick(View it) {
+            button3.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View it) {
                     Log.i("button", "button3");
-                    //fileMNG.addData(("$" + "BUTTON_3" + "@" + fileMNG.msgCurrentTime()));
-                    float index[]={3};
-                    fileMNG.addJsonData("button",index,fileMNG.msgCurrentTime());
+                    float[] index = {3};
+                    fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
 
                 }
-            }));
+            });
         }
     }
 
@@ -111,14 +104,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             Log.i("PAUSE", String.format("PAUSE DATA SEND %d", System.currentTimeMillis()));
             mSensorManager.sensorRegister();
-
-            //fileMNG.addData(mSensorManager.getDATA());
-            network.sndFunc(fileMNG.getJsonData(), this);//send
-            //mSensorManager.clearData();
+            network.sndFunc(fileMNG.getJsonData(), this);
             fileMNG.clearData();
-            //mSensorManager.sensorRegister();
-            //Log.i("INFO",mSensorManager.getDATA());
-            //network.sndFunc(mSensorManager.getDATA(),this);//send
 
         } catch (IOException e) {
             throw new RuntimeException(e);
