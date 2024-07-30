@@ -16,9 +16,7 @@ import java.util.Arrays;
 public class dataWriterAndManager extends AppCompatActivity {
     JSONObject my_msg;
     JSONArray my_data;
-    //String name="v0.0\n"+ Settings.Secure.ANDROID_ID;
     String name="temporary";
-    String app_version;
 
     public dataWriterAndManager(String name) {
         this.name=name;
@@ -31,18 +29,6 @@ public class dataWriterAndManager extends AppCompatActivity {
             throw new RuntimeException(e);
         }
     }
-
-//    public dataWriterAndManager(String username) {
-//        this.my_msg = new JSONObject();
-//        this.my_data = new JSONArray();
-//        try {
-//            this.my_msg.put("username", username);
-//            this.my_data.put(this.my_msg);
-//        } catch (JSONException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//    }
 
     public void addJsonData(String type, float[] value, long time) {
         JSONObject temp = new JSONObject();

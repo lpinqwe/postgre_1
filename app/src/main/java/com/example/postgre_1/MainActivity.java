@@ -1,8 +1,6 @@
 package com.example.postgre_1;
-
+import supplyClasses.ConfigClass;
 import android.provider.Settings;
-import android.provider.Settings.Secure;
-
 
 
 import android.os.Bundle;
@@ -38,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     SensorManagerClass mSensorManager;
     NetworkConnection network = new NetworkConnection();
-
+    ConfigClass conf = new ConfigClass();
+    //todo read about simple config
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         mSensorManager=new SensorManagerClass(this, fileMNG);
 
         fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
-        fileMNG.app_version = "0.0_default";
         super.onCreate(savedInstanceState);
 
         mSensorManager.onCreateSensors();
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         TextView tv = findViewById(R.id.textView2);
-        tv.setText(String.format("%s\n%s", fileMNG.app_version, fileMNG.name));
+        tv.setText(String.format("%s\ndevice name:%s", conf.version, fileMNG.name));
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
+//todo write button proc
     @Override
     protected void onStart() {
         Log.i("Service", "ZERO_POINT");
