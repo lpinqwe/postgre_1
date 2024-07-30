@@ -1,28 +1,32 @@
 package com.example.postgre_1;
 
+import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.provider.Settings.Secure;
+
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class dataWriterAndManager extends AppCompatActivity {
-    String saveData = "";
     JSONObject my_msg;
     JSONArray my_data;
     //String name="v0.0\n"+ Settings.Secure.ANDROID_ID;
-    String name;
+    String name="temporary";
     String app_version;
-    public dataWriterAndManager() {
+
+    public dataWriterAndManager(String name) {
+        this.name=name;
         this.my_msg = new JSONObject();
         this.my_data = new JSONArray();
         try {
             this.my_msg.put("username", this.name);
-
+            Log.i("msgName",my_msg.toString());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -48,6 +52,8 @@ public class dataWriterAndManager extends AppCompatActivity {
             temp.put("value", Arrays.toString(value));
             temp.put("time", time);
             this.my_data.put(temp);
+            Log.i("JSON data_insrted",temp.toString());
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -57,9 +63,6 @@ public class dataWriterAndManager extends AppCompatActivity {
         return System.currentTimeMillis();
     }
 
-    public String getData() {
-        return this.saveData;
-    }
 
     public JSONObject getJsonData(){
         try {
@@ -71,8 +74,7 @@ public class dataWriterAndManager extends AppCompatActivity {
         }
     }
     public void clearData() {
-        saveData = "";
-        Log.i("info",this.my_data.toString());
+        my_msg.remove("data");
     }
 
 

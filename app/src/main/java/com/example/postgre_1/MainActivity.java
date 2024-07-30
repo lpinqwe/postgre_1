@@ -1,5 +1,9 @@
 package com.example.postgre_1;
 
+import android.provider.Settings;
+import android.provider.Settings.Secure;
+
+
 
 import android.os.Bundle;
 import android.util.Log;
@@ -30,15 +34,18 @@ import java.io.IOException;
  *
  * */
 public class MainActivity extends AppCompatActivity {
+    dataWriterAndManager fileMNG ;
 
-    dataWriterAndManager fileMNG = new dataWriterAndManager();
-
-    SensorManagerClass mSensorManager = new SensorManagerClass(this, fileMNG);
+    SensorManagerClass mSensorManager;
     NetworkConnection network = new NetworkConnection();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        fileMNG = new dataWriterAndManager(mId);
+        mSensorManager=new SensorManagerClass(this, fileMNG);
+
         fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
         fileMNG.app_version = "0.0_default";
         super.onCreate(savedInstanceState);

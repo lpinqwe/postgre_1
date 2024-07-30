@@ -24,6 +24,8 @@ public class NetworkConnection {
         String postUrl = this.URL;
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         this.postData = data;
+        Log.i("info json my postData",this.postData.toString());
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
 
             @Override
