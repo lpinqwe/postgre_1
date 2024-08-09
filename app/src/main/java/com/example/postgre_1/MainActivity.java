@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         TextView tv = findViewById(R.id.textView2);
-        tv.setText(String.format("%s\ndevice name:%s", conf.version, fileMNG.name));
+        tv.setText(String.format("%stest app\ndevice name:%s", conf.version, fileMNG.name));
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
