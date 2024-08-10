@@ -30,7 +30,7 @@ public class SensorManagerClass implements SensorEventListener {
     List<Integer> sensorArrayList = new ArrayList<>();
     Context context_1;
     dataWriterAndManager dataWriterAndManager;
-     SensorManagerClass(Context context, dataWriterAndManager fileManager){
+     public SensorManagerClass(Context context, dataWriterAndManager fileManager){
         this.context_1 = context;
         this.dataWriterAndManager = fileManager;
     }

@@ -1,7 +1,8 @@
 package com.example.postgre_1;
+import ApplicationServices.CoordsGetter;
+import android.content.Intent;
 import supplyClasses.ConfigClass;
 import android.provider.Settings;
-
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import supplyClasses.DeviceUtils;
 import supplyClasses.NetworkConnection;
 
-
+//AccessibilityService --фигня
+//windowManager к пробе
 import java.io.IOException;
-
-
+//TODO redo request permission, logs
+//todo think about getting % of touch not x,y
 /*
  * sensorsClass to read:
  * 1  TYPE_GAME_ROTATION_VECTOR
@@ -32,7 +34,7 @@ import java.io.IOException;
  *
  * */
 public class MainActivity extends AppCompatActivity {
-    dataWriterAndManager fileMNG ;
+    dataWriterAndManager fileMNG;
 
     SensorManagerClass mSensorManager;
     NetworkConnection network = new NetworkConnection();
@@ -41,19 +43,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        startActivity(intent);
+        //Intent serviceForeground = new Intent(this, ForegroundWriter.class);
+        //startForegroundService(serviceForeground);
+
         String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         fileMNG = new dataWriterAndManager(mId);
-        mSensorManager=new SensorManagerClass(this, fileMNG);
+        //mSensorManager=new SensorManagerClass(this, fileMNG);
 
         fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
         super.onCreate(savedInstanceState);
-
-        mSensorManager.onCreateSensors();
-        mSensorManager.activateSensors();
+        //mSensorManager.onCreateSensors();
+        //mSensorManager.activateSensors();
 
         setContentView(R.layout.activity_main);
+
         TextView tv = findViewById(R.id.textView2);
         tv.setText(String.format("%stest app\ndevice name:%s", conf.version, fileMNG.name));
+
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
@@ -108,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         try {
             Log.i("PAUSE", String.format("PAUSE DATA SEND %d", System.currentTimeMillis()));
-            mSensorManager.sensorRegister();
+            //mSensorManager.sensorRegister();
             network.sndFunc(fileMNG.getJsonData(), this);
             fileMNG.clearData();
 
