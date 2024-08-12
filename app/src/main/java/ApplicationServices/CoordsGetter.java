@@ -16,7 +16,7 @@ import supplyClasses.NetworkConnection;
 import java.io.IOException;
 
 public class CoordsGetter extends AccessibilityService {
-    dataWriterAndManager fileMNG1 ;
+    dataWriterAndManager fileMNG1;
 
     SensorManagerClass mSensorManager1;
     NetworkConnection network1 = new NetworkConnection();
@@ -29,14 +29,16 @@ public class CoordsGetter extends AccessibilityService {
                     public void run() {
                         while (true) {
                             try {
-                                synchronized (fileMNG1) {
-                                    network1.sndFunc(fileMNG1.getJsonData(), getApplicationContext());
-                                    fileMNG1.clearData();
+                                if (mSensorManager1.isScreenUnlocked() == true) {
+                                    synchronized (fileMNG1) {
+                                        network1.sndFunc(fileMNG1.getJsonData(), getApplicationContext());
+                                        fileMNG1.clearData();
+                                    }
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace(); // Логирование ошибки
                             }
-                            Log.e("service", "service foreground running");
+                            //Log.e("service", "service foreground running");
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {
@@ -47,11 +49,12 @@ public class CoordsGetter extends AccessibilityService {
                 }
         ).start();
     }
+
     @Override
     protected void onServiceConnected() {
         String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         fileMNG1 = new dataWriterAndManager(mId);
-        mSensorManager1=new SensorManagerClass(this, fileMNG1);
+        mSensorManager1 = new SensorManagerClass(this, fileMNG1);
         fileMNG1.name = String.format(DeviceUtils.getAndroidID(this));
 
         mSensorManager1.onCreateSensors();
@@ -60,13 +63,14 @@ public class CoordsGetter extends AccessibilityService {
         Log.d("CoordsGetter", "Service connected");
         senderFunc();
     }
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.i("TouchLoggingService", "Event triggered: " + event.getEventType());
 
         // Слушаем события клика и длинного клика
         if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED ||
-                event.getEventType() == AccessibilityEvent.TYPE_VIEW_LONG_CLICKED||
+                event.getEventType() == AccessibilityEvent.TYPE_VIEW_LONG_CLICKED ||
                 event.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED
         ) {
 

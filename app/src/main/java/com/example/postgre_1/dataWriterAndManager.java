@@ -28,12 +28,12 @@ public class dataWriterAndManager {
         synchronized (lock) { // Синхронизация на уровне блока
             JSONObject temp = new JSONObject();
             try {
-                Log.i("JSON info", type);
+               // Log.i("JSON info", type);
                 temp.put("name", type);
                 temp.put("value", Arrays.toString(value));
                 temp.put("time", time);
                 this.my_data.put(temp);
-                Log.i("JSON data_inserted", temp.toString());
+               // Log.i("JSON data_inserted", temp.toString());
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

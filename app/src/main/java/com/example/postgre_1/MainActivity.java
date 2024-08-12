@@ -1,6 +1,12 @@
 package com.example.postgre_1;
+
 import ApplicationServices.CoordsGetter;
+import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.view.accessibility.AccessibilityManager;
 import supplyClasses.ConfigClass;
 import android.provider.Settings;
 
@@ -17,7 +23,8 @@ import supplyClasses.NetworkConnection;
 //AccessibilityService --фигня
 //windowManager к пробе
 import java.io.IOException;
-//TODO redo request permission, logs
+import java.util.List;
+
 //todo think about getting % of touch not x,y
 /*
  * sensorsClass to read:
@@ -39,67 +46,105 @@ public class MainActivity extends AppCompatActivity {
     SensorManagerClass mSensorManager;
     NetworkConnection network = new NetworkConnection();
     ConfigClass conf = new ConfigClass();
+
     //todo read about simple config
+    // Метод для проверки, включена ли служба Accessibility
+    private boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
+        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+
+        for (AccessibilityServiceInfo enabledService : enabledServices) {
+            if (enabledService.getId().equals(context.getPackageName() + "/" + service.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Метод для показа диалога с запросом у пользователя включить службу
+    private void showAccessibilityServiceRequestDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Accessibility Service Required")
+                .setMessage("Please enable the Accessibility Service to use this feature.")
+                .setPositiveButton("Enable", (dialog, which) -> {
+                    // Открываем настройки Accessibility для включения службы
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // Обрабатываем отказ пользователя (если требуется)
+                    dialog.dismiss();
+                })
+                .show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        startActivity(intent);
-        //Intent serviceForeground = new Intent(this, ForegroundWriter.class);
-        //startForegroundService(serviceForeground);
-
-        String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        fileMNG = new dataWriterAndManager(mId);
-        //mSensorManager=new SensorManagerClass(this, fileMNG);
-
-        fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
         super.onCreate(savedInstanceState);
-        //mSensorManager.onCreateSensors();
-        //mSensorManager.activateSensors();
 
-        setContentView(R.layout.activity_main);
-
-        TextView tv = findViewById(R.id.textView2);
-        tv.setText(String.format("%stest app\ndevice name:%s", conf.version, fileMNG.name));
-
-        Button button1 = findViewById(R.id.button1);
-        Button button2 = findViewById(R.id.button2);
-        Button button3 = findViewById(R.id.button3);
-
-        // operations to be performed
-        // when user tap on the button
-        if (button1 != null) {
-            button1.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View it) {
-                    Log.i("button", "button1");
-                    float[] index = {1};
-                    fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
-                }
-            });
+        if (!isAccessibilityServiceEnabled(this, CoordsGetter.class)) {
+            // Если не включена, показываем диалог для запроса у пользователя
+            showAccessibilityServiceRequestDialog();
         }
-        if (button2 != null) {
-            button2.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View it) {
-                    Log.i("button", "button2");
-                    float[] index = {2};
-                    fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
+
+            //Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            //startActivity(intent);
+            //Intent serviceForeground = new Intent(this, ForegroundWriter.class);
+            //startForegroundService(serviceForeground);
+
+            String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            fileMNG = new dataWriterAndManager(mId);
+            //mSensorManager=new SensorManagerClass(this, fileMNG);
+
+            fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
+            //mSensorManager.onCreateSensors();
+            //mSensorManager.activateSensors();
+
+            setContentView(R.layout.activity_main);
+
+            TextView tv = findViewById(R.id.textView2);
+            tv.setText(String.format("%stest app\ndevice name:%s", conf.version, fileMNG.name));
+
+            Button button1 = findViewById(R.id.button1);
+            Button button2 = findViewById(R.id.button2);
+            Button button3 = findViewById(R.id.button3);
+
+            // operations to be performed
+            // when user tap on the button
+            if (button1 != null) {
+                button1.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View it) {
+                        Log.i("button", "button1");
+                        float[] index = {1};
+                        fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
+                    }
+                });
+            }
+            if (button2 != null) {
+                button2.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View it) {
+                        Log.i("button", "button2");
+                        float[] index = {2};
+                        fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
 
 
-                }
-            });
+                    }
+                });
+            }
+            if (button3 != null) {
+                button3.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View it) {
+                        Log.i("button", "button3");
+                        float[] index = {3};
+                        fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
+
+                    }
+                });
+            }
         }
-        if (button3 != null) {
-            button3.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View it) {
-                    Log.i("button", "button3");
-                    float[] index = {3};
-                    fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
 
-                }
-            });
-        }
-    }
-//todo write button proc
+
+    //todo write button proc
     @Override
     protected void onStart() {
         Log.i("Service", "ZERO_POINT");

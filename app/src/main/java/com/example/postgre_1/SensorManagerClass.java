@@ -10,7 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.os.PowerManager;
+import android.app.KeyguardManager;
 
 /*
  * sensorsClass to read:
@@ -30,25 +35,36 @@ public class SensorManagerClass implements SensorEventListener {
     List<Integer> sensorArrayList = new ArrayList<>();
     Context context_1;
     dataWriterAndManager dataWriterAndManager;
-     public SensorManagerClass(Context context, dataWriterAndManager fileManager){
+    public boolean isCanGet;
+
+    public SensorManagerClass(Context context, dataWriterAndManager fileManager) {
         this.context_1 = context;
         this.dataWriterAndManager = fileManager;
     }
-    public void onCreateSensors(){
 
-    mSensorManager = (android.hardware.SensorManager) context_1.getSystemService(SENSOR_SERVICE);
+    public boolean isScreenUnlocked() {
+        KeyguardManager keyguardManager = (KeyguardManager) context_1.getSystemService(Context.KEYGUARD_SERVICE);
+        PowerManager powerManager = (PowerManager) context_1.getSystemService(Context.POWER_SERVICE);
+        isCanGet=(powerManager.isInteractive() && !keyguardManager.isKeyguardLocked());
+        return isCanGet;
+    }
 
-    sensorArrayList.add(Sensor.TYPE_GAME_ROTATION_VECTOR);
-    sensorArrayList.add(Sensor.TYPE_GYROSCOPE);
-    sensorArrayList.add(Sensor.TYPE_GRAVITY);
-    sensorArrayList.add(Sensor.TYPE_PROXIMITY);
-    sensorArrayList.add(Sensor.TYPE_ACCELEROMETER);
-    sensorArrayList.add(Sensor.TYPE_ROTATION_VECTOR);
-    sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
-    sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
-    sensorArrayList.add(Sensor.TYPE_ORIENTATION);
-    Log.i("SENSOR_ADD","addedSensor");
-}
+    public void onCreateSensors() {
+
+        mSensorManager = (android.hardware.SensorManager) context_1.getSystemService(SENSOR_SERVICE);
+
+        sensorArrayList.add(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        sensorArrayList.add(Sensor.TYPE_GYROSCOPE);
+        sensorArrayList.add(Sensor.TYPE_GRAVITY);
+        sensorArrayList.add(Sensor.TYPE_PROXIMITY);
+        sensorArrayList.add(Sensor.TYPE_ACCELEROMETER);
+        sensorArrayList.add(Sensor.TYPE_ROTATION_VECTOR);
+        sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
+        sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        sensorArrayList.add(Sensor.TYPE_ORIENTATION);
+        Log.i("SENSOR_ADD", "addedSensor");
+    }
+
     public void activateSensors() {
         for (int i = 0; i < sensorArrayList.size(); i++) {
             mSensorManager.registerListener(this,
@@ -56,7 +72,8 @@ public class SensorManagerClass implements SensorEventListener {
                     android.hardware.SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
-    public void sensorRegister(){
+
+    public void sensorRegister() {
         Log.i("WORKER", "SENDMESSAGEFUNCTION");
         mSensorManager.unregisterListener(this);
     }
@@ -64,35 +81,50 @@ public class SensorManagerClass implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Log.i("WORKER", "sensors changed");
+        if (isScreenUnlocked()) {
 
-        if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR ) {
-            eventValues(event,"TYPE_GAME_ROTATION_VECTOR");}
-        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE            ) {
-            eventValues(event,"TYPE_GYROSCOPE");}
-        if (event.sensor.getType() == Sensor.TYPE_GRAVITY              ) {
-            eventValues(event,"TYPE_GRAVITY");}
-        if (event.sensor.getType() == Sensor.TYPE_ORIENTATION          ) {
-            eventValues(event,"TYPE_ORIENTATION");}
-        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY            ) {
-            eventValues(event,"TYPE_PROXIMITY");}
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER        ) {
-            eventValues(event, "TYPE_ACCELEROMETER");}
-        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR      ) {
-            eventValues(event,"TYPE_ROTATION_VECTOR");}
-        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION  ) {
-            eventValues(event,"TYPE_LINEAR_ACCELERATION");}
-        if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE  ) {
-            eventValues(event,"TYPE_AMBIENT_TEMPERATURE");}
-        if (event.sensor.getType() == Sensor.TYPE_LIGHT                ) {
-            eventValues(event,"TYPE_LIGHT");}
+            //Log.i("WORKER", "sensors changed");
+
+            if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR) {
+                eventValues(event, "TYPE_GAME_ROTATION_VECTOR");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                eventValues(event, "TYPE_GYROSCOPE");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
+                eventValues(event, "TYPE_GRAVITY");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_ORIENTATION) {
+                eventValues(event, "TYPE_ORIENTATION");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                eventValues(event, "TYPE_PROXIMITY");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                eventValues(event, "TYPE_ACCELEROMETER");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+                eventValues(event, "TYPE_ROTATION_VECTOR");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+                eventValues(event, "TYPE_LINEAR_ACCELERATION");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+                eventValues(event, "TYPE_AMBIENT_TEMPERATURE");
+            }
+            if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                eventValues(event, "TYPE_LIGHT");
+            }
+        }
     }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
+
     private void eventValues(SensorEvent event, String type) {
         float[] values = event.values;
-        dataWriterAndManager.addJsonData(type,values, dataWriterAndManager.msgCurrentTime());
+        dataWriterAndManager.addJsonData(type, values, dataWriterAndManager.msgCurrentTime());
     }
 
     //todo make it better....
