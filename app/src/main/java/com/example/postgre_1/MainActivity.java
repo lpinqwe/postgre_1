@@ -6,6 +6,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.accessibility.AccessibilityManager;
 import supplyClasses.ConfigClass;
 import android.provider.Settings;
@@ -25,7 +26,6 @@ import supplyClasses.NetworkConnection;
 import java.io.IOException;
 import java.util.List;
 
-//todo think about getting % of touch not x,y
 /*
  * sensorsClass to read:
  * 1  TYPE_GAME_ROTATION_VECTOR
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     ConfigClass conf = new ConfigClass();
 
     //todo read about simple config
+    //todo write button proc
+//TODO send msg with params of screen {username,event-ecranParams,time0,[value]}
     // Метод для проверки, включена ли служба Accessibility
     private boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
         AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -81,24 +83,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        fileMNG = new dataWriterAndManager(mId);
+
+
+
+        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+        boolean isFirstTime = preferences.getBoolean("isFirstTime", true);
+
+        if (isFirstTime) {
+            // Показать запрос
+            fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
+
+            float[]tmp =DeviceUtils.getScreenResolution(this);
+            fileMNG.addJsonData("physical_screen", tmp, fileMNG.msgCurrentTime());
+
+            // Установить флаг в false, чтобы больше не показывать запрос
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("isFirstTime", false);
+            editor.apply();
+        }
 
         if (!isAccessibilityServiceEnabled(this, CoordsGetter.class)) {
             // Если не включена, показываем диалог для запроса у пользователя
             showAccessibilityServiceRequestDialog();
         }
-
-            //Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            //startActivity(intent);
-            //Intent serviceForeground = new Intent(this, ForegroundWriter.class);
-            //startForegroundService(serviceForeground);
-
-            String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            fileMNG = new dataWriterAndManager(mId);
-            //mSensorManager=new SensorManagerClass(this, fileMNG);
-
-            fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
-            //mSensorManager.onCreateSensors();
-            //mSensorManager.activateSensors();
 
             setContentView(R.layout.activity_main);
 
@@ -144,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    //todo write button proc
     @Override
     protected void onStart() {
         Log.i("Service", "ZERO_POINT");
