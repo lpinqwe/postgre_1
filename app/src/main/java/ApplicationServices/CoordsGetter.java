@@ -66,12 +66,11 @@ public class CoordsGetter extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        Log.i("TouchLoggingService", "Event triggered: " + event.getEventType());
+        Log.d("TouchLoggingService", "Event triggered: " + event.getEventType());
 
         // Слушаем события клика и длинного клика
         if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED ||
-                event.getEventType() == AccessibilityEvent.TYPE_VIEW_LONG_CLICKED ||
-                event.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED
+                event.getEventType() == AccessibilityEvent.TYPE_VIEW_LONG_CLICKED
         ) {
 
             // Получаем AccessibilityNodeInfo, представляющий элемент, с которым взаимодействовали
@@ -82,11 +81,12 @@ public class CoordsGetter extends AccessibilityService {
                 source.getBoundsInScreen(bounds);
 
                 // Определяем координаты центра элемента (X, Y)
-                int x = bounds.centerX();
-                int y = bounds.centerY();
-
+                float x = bounds.centerX();
+                float y = bounds.centerY();
+                float [] tmp = {x,y};
                 // Логируем координаты
-                Log.i("TouchLoggingService", "Button clicked at: (" + x + ", " + y + ")");
+                Log.d("TouchLoggingService", "Button clicked at: (" + x + ", " + y + ")");
+                fileMNG1.addJsonData("button_screen",tmp , fileMNG1.msgCurrentTime());
 
                 // Здесь можно добавить код для сохранения или отправки данных
             }

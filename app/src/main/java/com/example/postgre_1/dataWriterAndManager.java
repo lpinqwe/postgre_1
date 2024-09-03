@@ -18,22 +18,22 @@ public class dataWriterAndManager {
         this.my_data = new JSONArray();
         try {
             this.my_msg.put("username", this.name);
-            Log.i("msgName", my_msg.toString());
+            Log.d("msgName", my_msg.toString());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void addJsonData(String type, float[] value, long time) {
+    public void addJsonData(String event_name, float[] value, long time) {
         synchronized (lock) { // Синхронизация на уровне блока
             JSONObject temp = new JSONObject();
             try {
-               // Log.i("JSON info", type);
-                temp.put("name", type);
+               // Log.d("JSON info", event_name);
+                temp.put("name", event_name);
                 temp.put("value", Arrays.toString(value));
                 temp.put("time", time);
                 this.my_data.put(temp);
-               // Log.i("JSON data_inserted", temp.toString());
+               // Log.d("JSON data_inserted", temp.toString());
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

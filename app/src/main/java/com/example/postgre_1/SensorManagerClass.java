@@ -62,7 +62,7 @@ public class SensorManagerClass implements SensorEventListener {
         sensorArrayList.add(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorArrayList.add(Sensor.TYPE_AMBIENT_TEMPERATURE);
         sensorArrayList.add(Sensor.TYPE_ORIENTATION);
-        Log.i("SENSOR_ADD", "addedSensor");
+        Log.d("SENSOR_ADD", "addedSensor");
     }
 
     public void activateSensors() {
@@ -74,7 +74,7 @@ public class SensorManagerClass implements SensorEventListener {
     }
 
     public void sensorRegister() {
-        Log.i("WORKER", "SENDMESSAGEFUNCTION");
+        Log.d("WORKER", "SENDMESSAGEFUNCTION");
         mSensorManager.unregisterListener(this);
     }
 
@@ -83,7 +83,7 @@ public class SensorManagerClass implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (isScreenUnlocked()) {
 
-            //Log.i("WORKER", "sensors changed");
+            //Log.d("WORKER", "sensors changed");
 
             if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR) {
                 eventValues(event, "TYPE_GAME_ROTATION_VECTOR");

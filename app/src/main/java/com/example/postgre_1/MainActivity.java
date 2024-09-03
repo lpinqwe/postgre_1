@@ -1,12 +1,16 @@
 package com.example.postgre_1;
 
 import ApplicationServices.CoordsGetter;
+import ApplicationServices.CoordsGetterOverlay;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityManager;
 import supplyClasses.ConfigClass;
 import android.provider.Settings;
@@ -47,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
     NetworkConnection network = new NetworkConnection();
     ConfigClass conf = new ConfigClass();
 
-    //todo read about simple config
     //todo write button proc
-//TODO send msg with params of screen {username,event-ecranParams,time0,[value]}
-    // Метод для проверки, включена ли служба Accessibility
     private boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
         AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
@@ -80,22 +81,54 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        fileMNG = new dataWriterAndManager(mId);
-
-
+        boolean isServiceEnabled = isAccessibilityServiceEnabled(this, CoordsGetter.class);
+//        Intent serviceIntent = new Intent(this, CoordsGetterOverlay.class);
+//        if (!isServiceRunning(CoordsGetterOverlay.class)) {
+//            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                    Uri.parse("package:" + getPackageName()));
+//            startActivityForResult(intent, 1234);
+//
+//            startForegroundService(serviceIntent);
+//            Log.d("service start", "overlay ser main");
+//        }
 
         SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         boolean isFirstTime = preferences.getBoolean("isFirstTime", true);
+        SharedPreferences devicename = getSharedPreferences("name_device", Context.MODE_PRIVATE);
+
+        if (!isServiceEnabled) {
+            SharedPreferences.Editor editor = devicename.edit();
+            String mId = DeviceUtils.getEmail(this);
+            if (mId == "null") {
+                mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+
+
+            editor.putString("name_device", mId);
+            editor.apply();
+        }
+
+        fileMNG = new dataWriterAndManager(devicename.getString("name_device", "null"));
+
 
         if (isFirstTime) {
             // Показать запрос
             fileMNG.name = String.format(DeviceUtils.getAndroidID(this));
 
-            float[]tmp =DeviceUtils.getScreenResolution(this);
+            float[] tmp = DeviceUtils.getScreenResolution(this);
             fileMNG.addJsonData("physical_screen", tmp, fileMNG.msgCurrentTime());
 
             // Установить флаг в false, чтобы больше не показывать запрос
@@ -109,53 +142,53 @@ public class MainActivity extends AppCompatActivity {
             showAccessibilityServiceRequestDialog();
         }
 
-            setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-            TextView tv = findViewById(R.id.textView2);
-            tv.setText(String.format("%stest app\ndevice name:%s", conf.version, fileMNG.name));
+        TextView tv = findViewById(R.id.textView2);
+        tv.setText(String.format("%stest app\ndevice name:%s", conf.version, fileMNG.name));
 
-            Button button1 = findViewById(R.id.button1);
-            Button button2 = findViewById(R.id.button2);
-            Button button3 = findViewById(R.id.button3);
+        Button button1 = findViewById(R.id.button1);
+        Button button2 = findViewById(R.id.button2);
+        Button button3 = findViewById(R.id.button3);
 
-            // operations to be performed
-            // when user tap on the button
-            if (button1 != null) {
-                button1.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View it) {
-                        Log.i("button", "button1");
-                        float[] index = {1};
-                        fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
-                    }
-                });
-            }
-            if (button2 != null) {
-                button2.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View it) {
-                        Log.i("button", "button2");
-                        float[] index = {2};
-                        fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
-
-
-                    }
-                });
-            }
-            if (button3 != null) {
-                button3.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View it) {
-                        Log.i("button", "button3");
-                        float[] index = {3};
-                        fileMNG.addJsonData("button", index, fileMNG.msgCurrentTime());
-
-                    }
-                });
-            }
+        // operations to be performed
+        // when user tap on the button
+        if (button1 != null) {
+            button1.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View it) {
+                    Log.d("button_clalibrate", "button1");
+                    float[] index = {1};
+                    fileMNG.addJsonData("button_clalibrate", index, fileMNG.msgCurrentTime());
+                }
+            });
         }
+        if (button2 != null) {
+            button2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View it) {
+                    Log.d("button_clalibrate", "button2");
+                    float[] index = {2};
+                    fileMNG.addJsonData("button_clalibrate", index, fileMNG.msgCurrentTime());
+
+
+                }
+            });
+        }
+        if (button3 != null) {
+            button3.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View it) {
+                    Log.d("button_clalibrate", "button3");
+                    float[] index = {3};
+                    fileMNG.addJsonData("button_clalibrate", index, fileMNG.msgCurrentTime());
+
+                }
+            });
+        }
+    }
 
 
     @Override
     protected void onStart() {
-        Log.i("Service", "ZERO_POINT");
+        Log.d("Service", "ZERO_POINT");
         super.onStart();
     }
 
@@ -168,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         try {
-            Log.i("PAUSE", String.format("PAUSE DATA SEND %d", System.currentTimeMillis()));
+            Log.d("PAUSE", String.format("PAUSE DATA SEND %d", System.currentTimeMillis()));
             //mSensorManager.sensorRegister();
             network.sndFunc(fileMNG.getJsonData(), this);
             fileMNG.clearData();
