@@ -22,6 +22,7 @@ import supplyClasses.DeviceUtils;
 import supplyClasses.NetworkConnection;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class CoordsGetter extends AccessibilityService {
     dataWriterAndManager fileMNG1;
@@ -116,9 +117,10 @@ public class CoordsGetter extends AccessibilityService {
                 //float y = event.getRawY();
                 //Log.d("overlay XY", "x=" + x + "y=" + y);
                 // Логирование всех типов событий
-                //Log.d("SWITCH", "overlay outside at: (" + x + ", " + y + ")");
+                Log.d("SWITCH", "overlay outside at: (" + Arrays.toString(tmp) + ")");
                 // Передача события GestureDetector для дополнительной обработки
                 //gestureDetector.onTouchEvent(event);
+
                 fileMNG1.addJsonData("onTouch_event", tmp, fileMNG1.msgCurrentTime());
 
                 return false; // Возвращаем false, чтобы передать событие дальше
@@ -146,12 +148,10 @@ public class CoordsGetter extends AccessibilityService {
                 source.getBoundsInScreen(bounds);
 
                 // Определяем координаты центра элемента (X, Y)
-                float x = bounds.centerX();
-                float y = bounds.centerY();
-                float[] tmp = {x, y};
+                float[]tmp={bounds.bottom, bounds.left,bounds.right,bounds.top};
                 // Логируем координаты
-                Log.d("ACCESSIBILITY SERVICE", "element clicked at: (" + x + ", " + y + ")");
-                fileMNG1.addJsonData("button_screen", tmp, fileMNG1.msgCurrentTime());
+                Log.d("ACCESSIBILITY SERVICE", "element clicked at: (" + Arrays.toString(tmp) +")");
+                fileMNG1.addJsonData("button_bound_screen", tmp, fileMNG1.msgCurrentTime());
 
                 // Здесь можно добавить код для сохранения или отправки данных
             }
