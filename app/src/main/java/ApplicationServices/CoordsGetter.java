@@ -2,9 +2,17 @@ package ApplicationServices;
 
 
 import android.accessibilityservice.AccessibilityService;
+import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.example.postgre_1.SensorManagerClass;
@@ -17,10 +25,16 @@ import java.io.IOException;
 
 public class CoordsGetter extends AccessibilityService {
     dataWriterAndManager fileMNG1;
-
     SensorManagerClass mSensorManager1;
     NetworkConnection network1 = new NetworkConnection();
     ConfigClass conf = new ConfigClass();
+
+    private WindowManager windowManager;
+    private View touchInterceptor;
+    GestureDetector gestureDetector;
+    private static final String CHANNEL_ID = "CoordsGetterOverlayChannel";
+    private static final String LOG_TAG = "CoordsGetterOverlay";
+
 
     void senderFunc() {
         new Thread(
@@ -62,11 +76,61 @@ public class CoordsGetter extends AccessibilityService {
         super.onServiceConnected();
         Log.d("CoordsGetter", "Service connected");
         senderFunc();
+
+        this.gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                float x = e.getRawX();
+                float y = e.getRawY();
+                Log.d(LOG_TAG, "Single tap up at: (" + x + ", " + y + ")");
+                return super.onSingleTapUp(e);
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                float x = e.getRawX();
+                float y = e.getRawY();
+                Log.d(LOG_TAG, "Long press at: (" + x + ", " + y + ")");
+                super.onLongPress(e);
+            }
+        });
+        touchInterceptor = new View(this);
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        WindowManager.LayoutParams params;
+        params = new WindowManager.LayoutParams(
+                1, // Установите размер окна немного больше 1x1 пиксель
+                1, // Установите размер окна немного больше 1x1 пиксель
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT);
+
+        windowManager.addView(touchInterceptor, params);
+
+        // Установка OnTouchListener для перехвата касаний
+        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                float [] tmp = {event.getRawX(),event.getRawY()};
+                //float x = event.getRawX();
+                //float y = event.getRawY();
+                //Log.d("overlay XY", "x=" + x + "y=" + y);
+                // Логирование всех типов событий
+                //Log.d("SWITCH", "overlay outside at: (" + x + ", " + y + ")");
+                // Передача события GestureDetector для дополнительной обработки
+                //gestureDetector.onTouchEvent(event);
+                fileMNG1.addJsonData("onTouch_event", tmp, fileMNG1.msgCurrentTime());
+
+                return false; // Возвращаем false, чтобы передать событие дальше
+            }
+        });
+
+
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        Log.d("TouchLoggingService", "Event triggered: " + event.getEventType());
+        Log.d("ACCESSIBILITY SERVICE", "AS Event triggered: " + event.getEventType());
 
         // Слушаем события клика и длинного клика
         if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED ||
@@ -75,6 +139,7 @@ public class CoordsGetter extends AccessibilityService {
 
             // Получаем AccessibilityNodeInfo, представляющий элемент, с которым взаимодействовали
             AccessibilityNodeInfo source = event.getSource();
+
             if (source != null) {
                 // Получаем положение элемента на экране
                 Rect bounds = new Rect();
@@ -83,10 +148,10 @@ public class CoordsGetter extends AccessibilityService {
                 // Определяем координаты центра элемента (X, Y)
                 float x = bounds.centerX();
                 float y = bounds.centerY();
-                float [] tmp = {x,y};
+                float[] tmp = {x, y};
                 // Логируем координаты
-                Log.d("TouchLoggingService", "Button clicked at: (" + x + ", " + y + ")");
-                fileMNG1.addJsonData("button_screen",tmp , fileMNG1.msgCurrentTime());
+                Log.d("ACCESSIBILITY SERVICE", "element clicked at: (" + x + ", " + y + ")");
+                fileMNG1.addJsonData("button_screen", tmp, fileMNG1.msgCurrentTime());
 
                 // Здесь можно добавить код для сохранения или отправки данных
             }

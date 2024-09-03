@@ -23,7 +23,7 @@ public class NetworkConnection {
         String postUrl = this.URL;
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         this.postData = data;
-        Log.d("info json my postData",this.postData.toString());
+        //Log.d("info json my postData",this.postData.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
 
@@ -34,7 +34,7 @@ public class NetworkConnection {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("ERRROR", String.valueOf(error));
+                //Log.d("ERRROR", String.valueOf(error));
                 error.printStackTrace();
             }
         });

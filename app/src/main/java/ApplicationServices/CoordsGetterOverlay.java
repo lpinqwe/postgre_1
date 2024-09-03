@@ -8,10 +8,7 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.*;
 
 public class CoordsGetterOverlay extends Service {
 
@@ -64,16 +61,33 @@ public class CoordsGetterOverlay extends Service {
 
         // Создание Overlay (наложения) для перехвата событий касания
         touchInterceptor = new View(this);
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
         WindowManager.LayoutParams params;
+//
+//        params = new WindowManager.LayoutParams(
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, // Попробуйте изменить тип
+//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+//                        WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+//                PixelFormat.TRANSLUCENT
+//        );
+
+
+
+
+ //       params.gravity = Gravity.LEFT | Gravity.TOP;
+
 
         params = new WindowManager.LayoutParams(
-                10, // Установите размер окна немного больше 1x1 пиксель
-                10, // Установите размер окна немного больше 1x1 пиксель
+                1, // Установите размер окна немного больше 1x1 пиксель
+                1, // Установите размер окна немного больше 1x1 пиксель
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
 
-        windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         windowManager.addView(touchInterceptor, params);
 
         // Установка OnTouchListener для перехвата касаний
@@ -82,7 +96,7 @@ public class CoordsGetterOverlay extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 float x = event.getRawX();
                 float y = event.getRawY();
-
+                Log.d("COORDXY","x="+x+"y="+y);
                 // Логирование всех типов событий
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:

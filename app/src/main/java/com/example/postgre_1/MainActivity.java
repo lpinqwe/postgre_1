@@ -95,12 +95,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         boolean isServiceEnabled = isAccessibilityServiceEnabled(this, CoordsGetter.class);
-//        Intent serviceIntent = new Intent(this, CoordsGetterOverlay.class);
-//        if (!isServiceRunning(CoordsGetterOverlay.class)) {
+        Intent serviceIntent = new Intent(this, CoordsGetterOverlay.class);
+//        if (!Settings.canDrawOverlays(this)) {
 //            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
 //                    Uri.parse("package:" + getPackageName()));
 //            startActivityForResult(intent, 1234);
-//
+//        } else {
+//            // Если разрешение предоставлено, запускаем сервис
 //            startForegroundService(serviceIntent);
 //            Log.d("service start", "overlay ser main");
 //        }
